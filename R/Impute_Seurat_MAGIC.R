@@ -1,0 +1,20 @@
+#' A Cat Function
+#'
+#' This function allows you to express your love of cats.
+#' @param seurat_object The S4 Seurat object which contains filtered and normalized cells in the data slot.
+#' @keywords Seurat, MAGIC, imputation
+#' @export
+#' @examples
+#' impute_seurat_MAGIC()
+
+## This function takes as input a Seurat object and uses MAGIC to perform imputation of the data.
+## Imputation is performed on the filtered and normalized cells in the @data slot of the seurat object!
+## The imputed expression matrix will then be saved in the @data
+
+## dependencies :
+## Seurat : https://github.com/satijalab/seurat
+## MAGIC : https://github.com/KrishnaswamyLab/MAGIC
+
+impute_seurat_MAGIC <- function(seurat_object){
+
+}
