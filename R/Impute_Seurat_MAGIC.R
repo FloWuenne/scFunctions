@@ -21,8 +21,12 @@ impute_seurat_MAGIC <- function(seurat_object,t_parameter='auto'){
   ## transpose matrix for MAGIC
   transposed_data <- t(seurat_object@data)
 
+  ## Normalize data using MAGIC normalization function
+  data_filtered_normalized <- library.size.normalize(transposed_data)
+  sqrt_normalized_data <- sqrt(data_filtered_normalized)
+
   ## Actual imputation function
-  MAGIC_data <- magic(transposed_data,  genes="all_genes", t=t_parameter)
+  MAGIC_data <- magic(sqrt_normalized_data,  genes="all_genes", t=t_parameter)
 
   ## Retranspose the result for proper Seurat matrix format
   imputed_data <- t(MAGIC_data$result)
