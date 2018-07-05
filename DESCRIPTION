@@ -1,5 +1,5 @@
 Package: scFunctions
-Title: Tools for single cell data
+Title: Functions for single cell data analysis
 Version: 0.0.0.9000
 Authors@R: person("Florian", "Wuennemann", email = "flowuenne@gmail.com", role = c("aut", "cre"))
 Description: A collection of functions to handle single cell data QC and processing using tools such as Seurat and MAGIC.
