@@ -16,7 +16,8 @@
 
 ## dependencies:
 ## Seurat : https://github.com/satijalab/seurat
-## MAGIC : https://github.com/KrishnaswamyLab/MAGIC
+## Plotly :
+## ggplot2 :
 
 DE_Seurat <- function(seurat_object,
                       de_function='wilcox',
@@ -26,7 +27,10 @@ DE_Seurat <- function(seurat_object,
                       min_pct = 0.1)
   {
 
-  expression_seurat <- readRDS(seurat_object)
+  ## Load libraries
+  library(plotly)
+  library(ggplot2)
+  library(Seurat)
 
   ## print start message
   print("Starting differential expression analysis")
@@ -39,7 +43,7 @@ DE_Seurat <- function(seurat_object,
   cluster_number <- 0
 
   ## Iterate over each cluster in the @ident slot
-  for(this_cluster in sort(unique(seurat_objects.combined@ident))){
+  for(this_cluster in sort(unique(seurat_object@ident))){
 
     cluster_number <- cluster_number + 1
 
@@ -47,7 +51,7 @@ DE_Seurat <- function(seurat_object,
     print(paste("Working on cluster #",cluster_number,":",this_cluster,sep=""))
 
     ## Subset Seurat object to only contain cells from this cluster
-    cells_in_this_cluster <- SubsetData(seurat_objects.combined,
+    cells_in_this_cluster <- SubsetData(seurat_object,
                                         ident.use=this_cluster)
 
     ## Get vector of names for WT and ko cells
