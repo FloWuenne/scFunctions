@@ -16,8 +16,8 @@
 
 ## dependencies:
 ## Seurat : https://github.com/satijalab/seurat
-## Plotly :
-## ggplot2 :
+## Plotly : https://plot.ly/r/
+## ggplot2 : https://ggplot2.tidyverse.org/
 
 DE_Seurat <- function(seurat_object,
                       de_function='wilcox',
@@ -28,10 +28,10 @@ DE_Seurat <- function(seurat_object,
   {
 
   ## Load libraries
-  library(plotly)
-  library(ggplot2)
-  library(Seurat)
-  library(UpSetR)
+  require(plotly)
+  require(ggplot2)
+  require(Seurat)
+  require(UpSetR)
 
   ## print start message
   print("Starting differential expression analysis")
@@ -142,6 +142,9 @@ DE_Seurat <- function(seurat_object,
   ## Check the overlap of DE genes between clusters using
   ## UpsetR: https://cran.r-project.org/web/packages/UpSetR/vignettes/basic.usage.html
 
+
+  ## The two functions fromList and get_intersect_members originate from this github post:
+  ## https://github.com/hms-dbmi/UpSetR/issues/85
   ## Function to run UpsetR with a list of named vectors
   fromList <- function (input) {
     # Same as original fromList()...
@@ -158,6 +161,7 @@ DE_Seurat <- function(seurat_object,
     row.names(data) <- elements
     return(data)
   }
+
 
   ## Plot the Upet plot
     svg("../DE_Seurat/Overlap_DE_genes.svg",
