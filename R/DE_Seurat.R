@@ -31,6 +31,7 @@ DE_Seurat <- function(seurat_object,
   library(plotly)
   library(ggplot2)
   library(Seurat)
+  library(UpSetR)
 
   ## print start message
   print("Starting differential expression analysis")
@@ -84,9 +85,10 @@ DE_Seurat <- function(seurat_object,
 
       ## Save DE results in a joined table
       this_cluster_de_genes$cluster <- replicate(nrow(this_cluster_de_genes),this_cluster)
+      joined_res_table <- rbind(joined_res_table,this_cluster_de_genes)
 
-      joined_res_table <- merge(joined_res_table,this_cluster_de_genes)
-
+      ## Add all DE genes for this cell type to the UpsetR list
+      upset_Rlist_DE_genes[[this_cluster]] <- c(rownames(this_cluster_de_genes))
 
       ## Calculate cell type average expressions to check correlation between the two groups
       avg.cells_in_this_cluster <- log1p(AverageExpression(cells_in_this_cluster, show.progress = FALSE))
@@ -137,6 +139,72 @@ DE_Seurat <- function(seurat_object,
 
   }
 
+  ## Check the overlap of DE genes between clusters using
+  ## UpsetR: https://cran.r-project.org/web/packages/UpSetR/vignettes/basic.usage.html
+
+  ## Function to run UpsetR with a list of named vectors
+  fromList <- function (input) {
+    # Same as original fromList()...
+    elements <- unique(unlist(input))
+    data <- unlist(lapply(input, function(x) {
+      x <- as.vector(match(elements, x))
+    }))
+    data[is.na(data)] <- as.integer(0)
+    data[data != 0] <- as.integer(1)
+    data <- data.frame(matrix(data, ncol = length(input), byrow = F))
+    data <- data[which(rowSums(data) != 0), ]
+    names(data) <- names(input)
+    # ... Except now it conserves your original value names!
+    row.names(data) <- elements
+    return(data)
+  }
+
+  ## Plot the Upet plot
+    svg("../DE_Seurat/Overlap_DE_genes.svg",
+        width = 24,
+        height=20)
+    upset(fromList(upset_Rlist_DE_genes), order.by = "freq",
+          sets = names(upset_Rlist_DE_genes),
+          main.bar.color = "black",
+          matrix.color="#1482a5ff",
+          mainbar.y.label = "Number of DE genes",
+          point.size = 6,
+          line.size = 2,
+          show.numbers = TRUE,
+          group.by = "degree",
+          cutoff = 2,
+          text.scale= 3)
+    dev.off()
+
+    ## Function to get the members of an intersection
+    get_intersect_members <- function (x, ...){
+      require(dplyr)
+      require(tibble)
+      x <- x[,sapply(x, is.numeric)][,0<=colMeans(x[,sapply(x, is.numeric)],na.rm=T) & colMeans(x[,sapply(x, is.numeric)],na.rm=T)<=1]
+      n <- names(x)
+      x %>% rownames_to_column() -> x
+      l <- c(...)
+      a <- intersect(names(x), l)
+      ar <- vector('list',length(n)+1)
+      ar[[1]] <- x
+      i=2
+      for (item in n) {
+        if (item %in% a){
+          if (class(x[[item]])=='integer'){
+            ar[[i]] <- paste(item, '>= 1')
+            i <- i + 1
+          }
+        } else {
+          if (class(x[[item]])=='integer'){
+            ar[[i]] <- paste(item, '== 0')
+            i <- i + 1
+          }
+        }
+      }
+      do.call(filter_, ar) %>% column_to_rownames() -> x
+      return(x)
+    }
+
   ## Write table for all differentially expressed genes containing testing results
   write.table(joined_res_table,
               file=paste("../DE_Seurat/All_DE_genes.tsv",sep=""),
@@ -144,5 +212,7 @@ DE_Seurat <- function(seurat_object,
               quote=FALSE,
               row.names=TRUE,
               col.names=TRUE)
+
+  return(upset_Rlist_DE_genes)
 
   }
