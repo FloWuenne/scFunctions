@@ -54,11 +54,10 @@ DE_Seurat <- function(seurat_object,
     cells_in_this_cluster <- SubsetData(seurat_object,
                                         ident.use=this_cluster)
 
-    ## Get vector of names for WT and ko cells
-    cells_group_1 <- rownames(subset(cells_in_this_cluster@meta.data,grouping_var == de_groups[1]))
-    cells_group_2 <- rownames(subset(cells_in_this_cluster@meta.data,grouping_var == de_groups[2]))
+    ## Get vector of names for both groups of cells
+    cells_group_1 <- rownames(subset(cells_in_this_cluster@meta.data,get(grouping_var) == de_groups[1]))
+    cells_group_2 <- rownames(subset(cells_in_this_cluster@meta.data,get(grouping_var) == de_groups[2]))
 
-    #### EdgeR DE expression analysis
     ## Check whether there are cells in both groups, otherwise skip this cluster
     if(length(cells_group_1) > 1 & length(cells_group_2) > 1){
 
@@ -84,13 +83,10 @@ DE_Seurat <- function(seurat_object,
 
 
       ## Save DE results in a joined table
-      this_cluster_de_genes_wilcox$cluster <- replicate(nrow(this_cluster_de_genes_wilcox),this_cluster)
+      this_cluster_de_genes$cluster <- replicate(nrow(this_cluster_de_genes),this_cluster)
 
-      if(cluster_number == 1){
-        joined_res_table <- rbind(joined_res_table,this_cluster_de_genes_wilcox)
-      }else{
-        joined_res_table <- rbind(joined_res_table,this_cluster_de_genes_wilcox[2:nrow(this_cluster_de_genes_wilcox)])
-      }
+      joined_res_table <- merge(joined_res_table,this_cluster_de_genes)
+
 
       ## Calculate cell type average expressions to check correlation between the two groups
       avg.cells_in_this_cluster <- log1p(AverageExpression(cells_in_this_cluster, show.progress = FALSE))
@@ -98,10 +94,12 @@ DE_Seurat <- function(seurat_object,
 
 
       ## Make a correlation plot between the two conditions
-      corr_plot <- ggplot(avg.cells_in_this_cluster, aes(de_groups[1], de_groups[2],text=gene)) +
+      corr_plot <- ggplot(avg.cells_in_this_cluster, aes(get(de_groups[1]), get(de_groups[2]),text=gene)) +
         geom_point() +
-        ggtitle(paste("Cluster_",this_cluster,sep="")) +
-        geom_abline(intercept = 0, slope = 1, col="red")
+        ggtitle(paste("Cluster : ",this_cluster,sep="")) +
+        geom_abline(intercept = 0, slope = 1, col="red") +
+        labs(x = de_groups[1],
+             y= de_groups[2])
 
       ## Save normal png version of the plot
       ggsave(corr_plot,
