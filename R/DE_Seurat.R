@@ -85,10 +85,12 @@ DE_Seurat <- function(seurat_object,
 
       ## Save DE results in a joined table
       this_cluster_de_genes$cluster <- replicate(nrow(this_cluster_de_genes),this_cluster)
+      this_cluster_de_genes$gene <- rownames(this_cluster_de_genes)
+      rownames(this_cluster_de_genes) <- c()
       joined_res_table <- rbind(joined_res_table,this_cluster_de_genes)
 
       ## Add all DE genes for this cell type to the UpsetR list
-      upset_Rlist_DE_genes[[this_cluster]] <- c(rownames(this_cluster_de_genes))
+      upset_Rlist_DE_genes[[this_cluster]] <- c(this_cluster_de_genes$gene)
 
       ## Calculate cell type average expressions to check correlation between the two groups
       avg.cells_in_this_cluster <- log1p(AverageExpression(cells_in_this_cluster, show.progress = FALSE))
@@ -167,14 +169,14 @@ DE_Seurat <- function(seurat_object,
     svg("../DE_Seurat/Overlap_DE_genes.svg",
         width = 24,
         height=20)
-    upset(fromList(upset_Rlist_DE_genes), order.by = "freq",
+    upset(fromList(upset_Rlist_DE_genes),
+          order.by = "freq",
           sets = names(upset_Rlist_DE_genes),
           main.bar.color = "black",
           matrix.color="#1482a5ff",
           mainbar.y.label = "Number of DE genes",
           point.size = 6,
           line.size = 2,
-          show.numbers = TRUE,
           group.by = "degree",
           cutoff = 2,
           text.scale= 3)
@@ -215,6 +217,44 @@ DE_Seurat <- function(seurat_object,
               sep="\t",
               quote=FALSE,
               row.names=TRUE,
+              col.names=TRUE)
+
+  ## Count number of clusters each gene is found DE in and write a table for easy inspection
+  ## Count number of occurences for each gene and which cell types its in
+  genes_accumulated <- joined_res_table %>%
+    count(gene)
+
+  colnames(genes_accumulated) <- c("gene","Clusters_DE")
+
+  ## Count number of occurences for each gene and which cell types its in
+  genes_clusters <- joined_res_table %>%
+    group_by(gene) %>%
+    summarise(cluster_names = paste(cluster, collapse=","))
+
+  ## Calculate mean avgLogFC as well as the SD
+  genes_clusters_means <- joined_res_table %>%
+    group_by(gene) %>%
+    summarise(mean_avgLogFC = mean(avg_logFC),
+              SD_avgLogFC = sd(avg_logFC),
+              mean_pvalue_adj = mean(p_val_adj),
+              SD_pvalue_adj = sd(p_val_adj),
+              mean_pct1 = mean(pct.1),
+              SD_pct1 = sd(pct.1),
+              mean_pct2 = mean(pct.2),
+              SD_pct2 = sd(pct.2))
+
+  de_genes_count_intermediate <- merge(genes_accumulated,genes_clusters,by="gene")
+  de_genes_counts_final <- merge(de_genes_count_intermediate,genes_clusters_means)
+
+  de_genes_counts_final <- de_genes_counts_final %>%
+    arrange(Clusters_DE,desc(mean_avgLogFC))
+
+  ## Write table for all differentially expressed genes containing testing results
+  write.table(de_genes_counts_final,
+              file=paste("../DE_Seurat/DE_genes_summary.tsv",sep=""),
+              sep="\t",
+              quote=FALSE,
+              row.names=FALSE,
               col.names=TRUE)
 
   return(upset_Rlist_DE_genes)
