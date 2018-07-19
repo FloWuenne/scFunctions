@@ -10,7 +10,6 @@
 #' @param output_dir The relative directory that will be used to save results.
 #' @param de_groups The two group labels to use for differential expression, supplied as a vector.
 #' @param clusters_to_exclude Define a vector of clusters for which you don't want to perform DE analysis.
-#' @param number_of_intersections_to_show Define the number of intersections to plot in Upset R plot. default = show all intersections.
 #' @keywords Seurat, DE, differential expression
 #' @export
 #' @examples
@@ -83,7 +82,7 @@ DE_Seurat <- function(seurat_object,
                                                   min.pct = min_pct)
 
       ## Filter out genes with an adjusted p value that are not significant
-      this_cluster_de_genes <- subset(this_cluster_de_genes,p_val_adj > 0.05)
+      this_cluster_de_genes <- subset(this_cluster_de_genes,p_val_adj < 0.05)
 
       ## Write table for all differentially expressed genes containing testing results
       write.table(this_cluster_de_genes,
