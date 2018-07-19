@@ -6,7 +6,8 @@
 \usage{
 DE_Seurat(seurat_object, de_function = "wilcox",
   output_dir = "../DE_Seurat", grouping_var = "Genotype",
-  de_groups = c("WT", "KO"), min_pct = 0.1)
+  de_groups = c("WT", "KO"), min_pct = 0.1,
+  clusters_to_exclude = c())
 }
 \arguments{
 \item{seurat_object}{The S4 Seurat object which contains filtered and normalized cells in the data slot.}
@@ -16,6 +17,10 @@ DE_Seurat(seurat_object, de_function = "wilcox",
 \item{output_dir}{The relative directory that will be used to save results.}
 
 \item{de_groups}{The two group labels to use for differential expression, supplied as a vector.}
+
+\item{clusters_to_exclude}{Define a vector of clusters for which you don't want to perform DE analysis.}
+
+\item{number_of_intersections_to_show}{Define the number of intersections to plot in Upset R plot. default = show all intersections.}
 }
 \description{
 This function will take a precomputed Seurat object and perform differential expression analysis using one of the differential expression tests

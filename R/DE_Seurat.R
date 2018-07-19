@@ -9,6 +9,8 @@
 #' @param de_function The function that will be used to perform differential expression analysis. See ?FindMarkers in the Seurat package for all options.
 #' @param output_dir The relative directory that will be used to save results.
 #' @param de_groups The two group labels to use for differential expression, supplied as a vector.
+#' @param clusters_to_exclude Define a vector of clusters for which you don't want to perform DE analysis.
+#' @param number_of_intersections_to_show Define the number of intersections to plot in Upset R plot. default = show all intersections.
 #' @keywords Seurat, DE, differential expression
 #' @export
 #' @examples
@@ -24,7 +26,8 @@ DE_Seurat <- function(seurat_object,
                       output_dir= "../DE_Seurat",
                       grouping_var = "Genotype",
                       de_groups = c("WT","KO"),
-                      min_pct = 0.1)
+                      min_pct = 0.1,
+                      clusters_to_exclude = c())
   {
 
   ## Load libraries
@@ -32,6 +35,7 @@ DE_Seurat <- function(seurat_object,
   require(ggplot2)
   require(Seurat)
   require(UpSetR)
+  require(dplyr)
 
   ## print start message
   print("Starting differential expression analysis")
@@ -43,8 +47,12 @@ DE_Seurat <- function(seurat_object,
   ## Set cluster numbers to keep track of how many clusters have been processed
   cluster_number <- 0
 
+  ## Get vector of clusters to test
+  clusters_to_test <- sort(unique(seurat_object@ident))
+  clusters_to_test <- setdiff(clusters_to_test,clusters_to_exclude)
+
   ## Iterate over each cluster in the @ident slot
-  for(this_cluster in sort(unique(seurat_object@ident))){
+  for(this_cluster in clusters_to_test){
 
     cluster_number <- cluster_number + 1
 
@@ -74,6 +82,9 @@ DE_Seurat <- function(seurat_object,
                                                   test.use = de_function,
                                                   min.pct = min_pct)
 
+      ## Filter out genes with an adjusted p value that are not significant
+      this_cluster_de_genes <- subset(this_cluster_de_genes,p_val_adj > 0.05)
+
       ## Write table for all differentially expressed genes containing testing results
       write.table(this_cluster_de_genes,
                   file=paste("../DE_Seurat/Cluster_",this_cluster,"_significant_DE_genes.",de_function,".txt",sep=""),
@@ -89,7 +100,7 @@ DE_Seurat <- function(seurat_object,
       rownames(this_cluster_de_genes) <- c()
       joined_res_table <- rbind(joined_res_table,this_cluster_de_genes)
 
-      ## Add all DE genes for this cell type to the UpsetR list
+      ## Add DE for this cell type to the UpsetR list
       upset_Rlist_DE_genes[[this_cluster]] <- c(this_cluster_de_genes$gene)
 
       ## Calculate cell type average expressions to check correlation between the two groups

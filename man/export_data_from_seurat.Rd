@@ -4,12 +4,12 @@
 \alias{export_data_from_seurat}
 \title{Function to export data tables from Seurat object.}
 \usage{
-export_data_from_seurat(seurat_objects, output_dir = ".")
+export_data_from_seurat(seurat_object, output_dir = ".")
 }
 \arguments{
-\item{output_dir}{Directory where the data tables will be saved.}
-
 \item{seurat_object}{The S4 Seurat object which contains filtered and normalized cells in the data slot.}
+
+\item{output_dir}{Directory where the data tables will be saved.}
 }
 \description{
 This simple function will save the raw UMI matrix (seurat_object@raw.data), the normalized UMI matrix (seurat_object@data)
