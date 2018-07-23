@@ -19,8 +19,6 @@ DE_Seurat(seurat_object, de_function = "wilcox",
 \item{de_groups}{The two group labels to use for differential expression, supplied as a vector.}
 
 \item{clusters_to_exclude}{Define a vector of clusters for which you don't want to perform DE analysis.}
-
-\item{number_of_intersections_to_show}{Define the number of intersections to plot in Upset R plot. default = show all intersections.}
 }
 \description{
 This function will take a precomputed Seurat object and perform differential expression analysis using one of the differential expression tests
