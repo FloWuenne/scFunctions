@@ -36,7 +36,7 @@ impute_seurat_MAGIC <- function(seurat_object){
   imputed_data <- t(MAGIC_data$result)
 
   ## Replace old Seurat data with imputed matrix
-  seurat_object@imputed <- imputed_data
+  seurat_object@imputed <- as.data.frame(imputed_data)
 
   return(seurat_object)
 }
