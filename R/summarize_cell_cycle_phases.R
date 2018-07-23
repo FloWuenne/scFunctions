@@ -19,6 +19,8 @@
 ## dependencies:
 ## Seurat : https://github.com/satijalab/seurat
 ## ggplot2 : https://ggplot2.tidyverse.org/
+## RColorBrewer : https://cran.r-project.org/web/packages/RColorBrewer/RColorBrewer.pdf
+## dplyr : https://cran.r-project.org/web/packages/dplyr/vignettes/dplyr.html
 
 
 summarize_cell_cycle_phases <- function(seurat_object,
@@ -31,7 +33,6 @@ summarize_cell_cycle_phases <- function(seurat_object,
                                         per_cell_type=FALSE){
 
   ## Load libraries
-  require(plotly)
   require(ggplot2)
   require(Seurat)
   require(dplyr)
