@@ -86,7 +86,7 @@ DE_Seurat <- function(seurat_object,
 
       ## Write table for all differentially expressed genes containing testing results
       write.table(this_cluster_de_genes,
-                  file=paste("../DE_Seurat/Cluster_",this_cluster,"_significant_DE_genes.",de_function,".txt",sep=""),
+                  file=paste(output_dir,"/",this_cluster,"_significant_DE_genes.",de_function,".txt",sep=""),
                   sep="\t",
                   quote=FALSE,
                   row.names=TRUE,
@@ -117,12 +117,12 @@ DE_Seurat <- function(seurat_object,
 
       ## Save normal png version of the plot
       ggsave(corr_plot,
-             file=paste("../DE_Seurat/Cluster_",this_cluster,"_corrplot.png",sep=""))
+             file=paste(output_dir,"/",this_cluster,"_corrplot.png",sep=""))
 
       ## Also make an interactive version using plotly
       library(plotly)
 
-      htmlwidgets::saveWidget(as.widget(ggplotly(corr_plot)), paste("../DE_Seurat/Cluster_",this_cluster,"_corrplot.plotly.html",sep=""))
+      htmlwidgets::saveWidget(as.widget(ggplotly(corr_plot)), paste(output_dir,"/",this_cluster,"_corrplot.plotly.html",sep=""))
 
       # ## Plot volcano plot
       # volcano_plot <- ggplot(this_cluster_de_genes,aes(logFC,-log(PValue))) +
@@ -176,7 +176,7 @@ DE_Seurat <- function(seurat_object,
 
 
   ## Plot the Upet plot
-    svg("../DE_Seurat/Overlap_DE_genes.svg",
+    svg(paste(output_dir,"/Overlap_DE_genes.svg",sep=""),
         width = 24,
         height=20)
     upset(fromList(upset_Rlist_DE_genes),
@@ -223,7 +223,7 @@ DE_Seurat <- function(seurat_object,
 
   ## Write table for all differentially expressed genes containing testing results
   write.table(joined_res_table,
-              file=paste("../DE_Seurat/All_DE_genes.tsv",sep=""),
+              file=paste(output_dir,"/All_DE_genes.tsv",sep=""),
               sep="\t",
               quote=FALSE,
               row.names=TRUE,
@@ -261,7 +261,7 @@ DE_Seurat <- function(seurat_object,
 
   ## Write table for all differentially expressed genes containing testing results
   write.table(de_genes_counts_final,
-              file=paste("../DE_Seurat/DE_genes_summary.tsv",sep=""),
+              file=paste(output_dir,"/DE_genes_summary.tsv",sep=""),
               sep="\t",
               quote=FALSE,
               row.names=FALSE,
