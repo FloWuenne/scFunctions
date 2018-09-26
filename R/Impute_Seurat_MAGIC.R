@@ -22,21 +22,23 @@ impute_seurat_MAGIC <- function(seurat_object){
   require(Seurat)
   require(Rmagic)
 
+  ## Print status message
+  print("Starting magic imputation on your seurat object...")
+
   ## transpose matrix for MAGIC
   transposed_data <- t(as.matrix(seurat_object@data))
 
-  ## Normalize data using MAGIC normalization function
-  data_filtered_normalized <- library.size.normalize(transposed_data)
-  sqrt_normalized_data <- sqrt(data_filtered_normalized)
-
   ## Actual imputation function
-  MAGIC_data <- magic(sqrt_normalized_data,  genes='all_genes')
+  MAGIC_data <- magic(transposed_data,  genes='all_genes')
 
   ## Retranspose the result for proper Seurat matrix format
   imputed_data <- t(MAGIC_data$result)
 
   ## Replace old Seurat data with imputed matrix
   seurat_object@imputed <- as.data.frame(imputed_data)
+
+  ## Print status message
+  print("Mieschief managed, MAGIC has been run on your data! ")
 
   return(seurat_object)
 }
