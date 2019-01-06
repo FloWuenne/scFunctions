@@ -87,7 +87,7 @@ DE_Seurat <- function(seurat_object,
                                           )
 
       ## Filter out genes with an adjusted p value that are not significant
-      this_cluster_de_genes <- subset(this_cluster_de_genes,p_val_adj < 0.05)
+      #this_cluster_de_genes <- subset(this_cluster_de_genes,p_val_adj < 0.05)
 
       ## Write table for all differentially expressed genes containing testing results
       write.table(this_cluster_de_genes,
