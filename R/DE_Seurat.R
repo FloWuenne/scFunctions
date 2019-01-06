@@ -26,6 +26,7 @@ DE_Seurat <- function(seurat_object,
                       grouping_var = "Genotype",
                       de_groups = c("WT","KO"),
                       min_pct = 0.1,
+                      man.logfc.threshold = 0.25,
                       clusters_to_exclude = c())
   {
 
@@ -79,7 +80,9 @@ DE_Seurat <- function(seurat_object,
                                                   ident.2 = de_groups[2],
                                                   print.bar = TRUE,
                                                   test.use = de_function,
-                                                  min.pct = min_pct)
+                                                  min.pct = min_pct,
+                                                  logfc.threshold = man.logfc.threshold
+                                          )
 
       ## Filter out genes with an adjusted p value that are not significant
       this_cluster_de_genes <- subset(this_cluster_de_genes,p_val_adj < 0.05)
