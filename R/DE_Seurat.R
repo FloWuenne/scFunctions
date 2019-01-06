@@ -124,10 +124,10 @@ DE_Seurat <- function(seurat_object,
       ggsave(corr_plot,
              file=paste(output_dir,"/",this_cluster,"_corrplot.png",sep=""))
 
-      ## Also make an interactive version using plotly
-      library(plotly)
-
-      htmlwidgets::saveWidget(as_widget(ggplotly(corr_plot)), paste(output_dir,"/",this_cluster,"_corrplot.plotly.html",sep=""))
+      # ## Also make an interactive version using plotly
+      # library(plotly)
+      #
+      # htmlwidgets::saveWidget(as_widget(ggplotly(corr_plot)), paste(output_dir,"/",this_cluster,"_corrplot.plotly.html",sep=""))
 
       # ## Plot volcano plot
       # volcano_plot <- ggplot(this_cluster_de_genes,aes(logFC,-log(PValue))) +
