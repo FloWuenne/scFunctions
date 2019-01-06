@@ -7,7 +7,7 @@
 DE_Seurat(seurat_object, de_function = "wilcox",
   output_dir = "../DE_Seurat", grouping_var = "Genotype",
   de_groups = c("WT", "KO"), min_pct = 0.1,
-  clusters_to_exclude = c())
+  man.logfc.threshold = 0.25, clusters_to_exclude = c())
 }
 \arguments{
 \item{seurat_object}{The S4 Seurat object which contains filtered and normalized cells in the data slot.}
@@ -17,6 +17,10 @@ DE_Seurat(seurat_object, de_function = "wilcox",
 \item{output_dir}{The relative directory that will be used to save results.}
 
 \item{de_groups}{The two group labels to use for differential expression, supplied as a vector.}
+
+\item{min_pct}{The minimum percentage of cells in either group to express a gene for it to be tested. (Changes Seurats FindMarker min.pct variable)}
+
+\item{man.logfc.threshold}{The minimum log-fold change a change has to have to be tested. (changes Seurats FindMarker logfc.threshold variable)}
 
 \item{clusters_to_exclude}{Define a vector of clusters for which you don't want to perform DE analysis.}
 }

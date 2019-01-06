@@ -4,7 +4,7 @@
 \alias{impute_seurat_MAGIC}
 \title{A function to perform imputation on a Seurat object using MAGIC.}
 \usage{
-impute_seurat_MAGIC(seurat_object, t_parameter = "auto")
+impute_seurat_MAGIC(seurat_object)
 }
 \arguments{
 \item{seurat_object}{The S4 Seurat object which contains filtered and normalized cells in the data slot.}

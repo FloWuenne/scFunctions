@@ -9,6 +9,8 @@
 #' @param de_function The function that will be used to perform differential expression analysis. See ?FindMarkers in the Seurat package for all options.
 #' @param output_dir The relative directory that will be used to save results.
 #' @param de_groups The two group labels to use for differential expression, supplied as a vector.
+#' @param min_pct The minimum percentage of cells in either group to express a gene for it to be tested. (Changes Seurats FindMarker min.pct variable)
+#' @param man.logfc.threshold The minimum log-fold change a change has to have to be tested. (changes Seurats FindMarker logfc.threshold variable)
 #' @param clusters_to_exclude Define a vector of clusters for which you don't want to perform DE analysis.
 #' @keywords Seurat, DE, differential expression
 #' @export
