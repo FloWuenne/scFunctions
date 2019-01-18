@@ -17,8 +17,7 @@ prepare_clustering_for_shiny <- function(seurat_object,
                                          marker_table,
                                          label = "E14.5",
                                          imputed = FALSE,
-                                         output_dir = ".",
-                                         marker_table) {
+                                         output_dir = ".") {
 
   ## Load libraries
   require(Seurat)
