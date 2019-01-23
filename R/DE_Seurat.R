@@ -29,7 +29,8 @@ DE_Seurat <- function(seurat_object,
                       de_groups = c("WT","KO"),
                       min_pct = 0.1,
                       man.logfc.threshold = 0.25,
-                      clusters_to_exclude = c())
+                      clusters_to_exclude = c(),
+                      max_cells = Inf)
   {
 
   ## Load libraries
@@ -83,7 +84,8 @@ DE_Seurat <- function(seurat_object,
                                                   print.bar = TRUE,
                                                   test.use = de_function,
                                                   min.pct = min_pct,
-                                                  logfc.threshold = man.logfc.threshold
+                                                  logfc.threshold = man.logfc.threshold,
+                                           max.cells.per.ident = max_cells
                                           )
 
       ## Filter out genes with an adjusted p value that are not significant
