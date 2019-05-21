@@ -3,6 +3,7 @@
 export(DE_Seurat)
 export(auc_thresh_kmeans)
 export(binarize_regulons)
+export(calculate_csi)
 export(calculate_rrs)
 export(export_data_from_seurat)
 export(extract_data_for_shiny_clustering)
