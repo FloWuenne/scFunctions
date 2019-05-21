@@ -5,8 +5,8 @@
 \title{Function to prepare as RDS object for http://andelfingerlab.heart_maturation.genap.ca from a precomputed Seurat object.
 The new object will have optimized size and data structure for usage in the Rshiny server.}
 \usage{
-prepare_clustering_for_shiny(seurat_object, label = "E14.5",
-  imputed = FALSE, output_dir = ".")
+prepare_clustering_for_shiny(seurat_object, marker_table,
+  label = "E14.5", imputed = FALSE, output_dir = ".")
 }
 \arguments{
 \item{seurat_object}{The S4 Seurat object which contains filtered and normalized cells in the data slot.}
