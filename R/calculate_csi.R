@@ -8,6 +8,8 @@
 
 calculate_csi <- function(regulonAUC){
 
+  require(tidyverse)
+
   regulonAUC_sub <- t(regulonAUC@assays$data@listData$AUC)
 
   pearson_cor <- cor(regulonAUC_sub)
@@ -32,11 +34,11 @@ calculate_csi <- function(regulonAUC){
 
       pcc_lower1 <- pearson_cor_long %>%
         subset(regulon_1 == reg & regulon_2 != reg & regulon_2 != reg2) %>%
-        summarise("pcc_lower" = count(pcc < this_pair_pcc))
+        summarise("pcc_lower" = matrixStats::count(pcc < this_pair_pcc))
 
       pcc_lower2 <- pearson_cor_long %>%
         subset(regulon_2 == reg2 & regulon_1 != reg2 & regulon_2 != reg) %>%
-        summarise("pcc_lower" = count(pcc < this_pair_pcc))
+        summarise("pcc_lower" = matrixStats::count(pcc < this_pair_pcc))
 
       csi <- (pcc_lower1$pcc_lower + pcc_lower2$pcc_lower) / ((num_regulons - 2 )*2)
       this_csi <- data.frame("regulon_1" = reg,
