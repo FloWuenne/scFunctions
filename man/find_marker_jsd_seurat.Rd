@@ -15,11 +15,7 @@ find_marker_jsd_seurat(seurat_object, custom_ident = FALSE,
 \item{percent_det}{Percentage of cells a gene has to be expressed in to be considered for being tested as a marker. default= 0.25 (10% of all cells)}
 }
 \description{
-Takes a processed Seurat object as input and identifies marker genes using Jensen-Shannon divergence.
-Very similar to idea from the monocle package function find_cluster_markers. Uses the
-}
-\details{
-Currently uses v2 Seurat objects as input!
+Uses Jensen-Shannon divergence to find marker genes for clusters
 }
 \examples{
 rm_doublets_seurat()

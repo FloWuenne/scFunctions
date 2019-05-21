@@ -1,10 +1,5 @@
 #' Uses Jensen-Shannon divergence to find marker genes for clusters
 #'
-#' Takes a processed Seurat object as input and identifies marker genes using Jensen-Shannon divergence.
-#' Very similar to idea from the monocle package function find_cluster_markers. Uses the
-#'
-#' Currently uses v2 Seurat objects as input!
-#'
 #' @param seurat_object The S4 Seurat object which contains filtered and normalized cells in the data slot.
 #' @param custom_ident If specified, will use a column from meta.data instead of the ident of the seurat object.
 #' @param percent_det Percentage of cells a gene has to be expressed in to be considered for being tested as a marker. default= 0.25 (10% of all cells)
