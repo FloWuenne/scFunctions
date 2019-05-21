@@ -1,6 +1,5 @@
 #' Calculates CSI values for all regulon pairs
 #'
-#'
 #' @param regulonAUC The AUC values for all regulons as calculated by SCENIC (content of file:3.4_regulonAUC.Rds).
 #' @keywords SCENIC, regulons, binary activity, kmeans, thresholds
 #' @export

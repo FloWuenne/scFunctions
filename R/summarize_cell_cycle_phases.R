@@ -15,7 +15,6 @@
 #' @export
 #' @examples
 #' summarize_cell_cycle_phases()
-
 ## dependencies:
 ## Seurat : https://github.com/satijalab/seurat
 ## ggplot2 : https://ggplot2.tidyverse.org/
