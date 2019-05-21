@@ -8,12 +8,6 @@
 #' @examples
 #' rm_doublets_seurat()
 
-## dependencies:
-## Seurat : https://github.com/satijalab/seurat
-## tidyr :
-## dplyr :
-##
-
 
 find_marker_jsd_seurat <- function(seurat_object,
                                    custom_ident = FALSE,
