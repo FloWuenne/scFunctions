@@ -43,7 +43,23 @@ In the original implemntation of SCENIC, the authors included a function to dete
 Let us use the regulons AUC values to determine thresholds using our k-means function. 
 
 ```{r}
-regulonAUC <- readRDS("../example_data/regulonsAUC_subset.Rds")
-kmer_thresholds <- binarize_regulons()
+regulonAUC <- readRDS("../example_data/regulonAUC_subset.Rds")
+kmer_thresholds <- auc_thresh_kmeans(regulonAUC)
+```
+
+The thresholds are saved in list format where each regulon is the name of the list and the AUC threshold is the value of the list.
+
+```{r}
+head(kmer_thresholds)
+```
+
+While we use a sample k-means clustering approache with 2 clusters here to determine thresholds, there are obviously more sophisticated approaches than this to determine thresholds in the AUC distribution. Feel free to develop your own approaches to determine optimal thresholds to binarize regulons. I would be excited to hear back if you developed your own function to perform this task!
+
+## Binarize regulons using thresholds
+
+Now that we have our thresholds, it is time to binarize the regulons using these thresholds.
+
+```{r}
+
 ```
 
