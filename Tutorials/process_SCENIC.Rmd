@@ -1,0 +1,49 @@
+---
+title: "Processing and visualization of SCENIC results"
+author: Florian Wuennemann
+date: March 22, 2005
+output: 
+  html_document:
+    theme: flatly
+    highlight: tango
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction 
+
+This tutorial will describe how to use the functions implemented in this package to further process the output from a typical run of the [SCENIC pipeline](https://github.com/aertslab/SCENIC). This tutorial assumes that you have processed your data up until the third step of the pipeline. The following data will be required for completely running this tutorial:
+
+* **regulonAUC** - The regulon activity scores in matrix format (output from file 3.4_regulonAUC.Rds)
+* **cell classifications for your cell** - For example using a metadata data frame from a seurat object
+
+We provide a small test data set as part of this package, which can be found in ./example_data to help test the scripts and analysis and get familiar with the different data formats and plots. The example_data is from [Wuennemann et al.](http://andelfingerlab.heart_maturation.genap.ca/) and represents the AUC values for heart cells from E14.5 embryonic hearts.
+
+# Installation
+
+You can easily install the package with the following command:
+
+```{r}
+library(devtools)
+install_github("FloWuenne/scFunctions")
+```
+
+# Regulon analysis 
+
+Many of the analysis concepts and statistics that are calculated in this tutorial have been derived from a publication by [Suo et al. (2018) in Cell Reports](https://www.cell.com/cell-reports/fulltext/S2211-1247(18)31634-6?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS2211124718316346%3Fshowall%3Dtrue). In their publication, they used a modified version of SCENIC to call regulons for the [Mouse Cell Atlas dataset](http://bis.zju.edu.cn/MCA/).
+
+## Determine AUC thresholds
+
+In the original implemntation of SCENIC, the authors included a function to determine thresholds for the AUC activity via the function: AUCell_exploreThresholds(). In this package, we wrote a very simple function that determines thresholds based on k-means clustering on the AUC distribution. This function performs comparable to the original implementation but is much faster. Please keep in mind however, that this function might not perform very well for setting thresholds for non-bimodal distribution, which are quite often observed for regulons. We still advise to manually check and adjust the thresholds prior to binarization of regulons! 
+
+Let us use the regulons AUC values to determine thresholds using our k-means function. 
+
+```{r}
+regulonAUC <- readRDS("../example_data/regulonsAUC_subset.Rds")
+kmer_thresholds <- binarize_regulons()
+```
+

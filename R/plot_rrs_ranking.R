@@ -15,10 +15,19 @@ plot_rrs_ranking <- function(rrs_df,
                              cell_type,
                              ggrepel_force = 1,
                              ggrepel_point_padding = 0.2,
-                             top_genes = 4){
+                             top_genes = 4,
+                             plot_extended = FALSE){
 
   require(ggrepel)
   require(cowplot)
+
+  if(plot_extended == TRUE){
+    rrs_df <- rrs_df %>%
+      subset(grepl("extended",regulon))
+  }else if(plot_extended == FALSE){
+    rrs_df <- rrs_df %>%
+      subset(!grepl("extended",regulon))
+  }
 
   if(cell_type != "all") {
     rrs_df_sub <- rrs_df %>%
@@ -41,7 +50,7 @@ plot_rrs_ranking <- function(rrs_df,
            title = cell_type)
   }else if(cell_type == "all"){
 
-    rrs_df_sub <- rrs_scores %>%
+    rrs_df_sub <- rrs_df %>%
       group_by(cell_type) %>%
       mutate("rank" = order(order(RSS, decreasing = TRUE)))
 

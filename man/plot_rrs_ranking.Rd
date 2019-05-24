@@ -5,7 +5,7 @@
 \title{Calculates Regulon specificity score (RSS) from binary regulon activity.}
 \usage{
 plot_rrs_ranking(rrs_df, cell_type, ggrepel_force = 1,
-  ggrepel_point_padding = 0.2, top_genes = 4)
+  ggrepel_point_padding = 0.2, top_genes = 4, plot_extended = FALSE)
 }
 \arguments{
 \item{rrs_df}{Data frame containing RSS scores for all regulons over all cell types. Can be created with calculate_rrs.}

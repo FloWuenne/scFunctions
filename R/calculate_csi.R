@@ -29,18 +29,22 @@ calculate_csi <- function(regulonAUC){
     print(reg)
     for(reg2 in unique(pearson_cor_long$regulon_2)){
 
-      ## Don't calculate CSI for regulon with itself
       this_pair_pcc <- subset(pearson_cor_long,regulon_1 == reg & regulon_2 == reg2)$pcc
 
-      pcc_lower1 <- pearson_cor_long %>%
-        subset(regulon_1 == reg & regulon_2 != reg & regulon_2 != reg2) %>%
-        summarise("pcc_lower" = matrixStats::count(pcc < this_pair_pcc))
+      pcc_reg1 <- pearson_cor_long %>%
+        subset(regulon_1 == reg & regulon_2 != reg & regulon_2 != reg2)
 
-      pcc_lower2 <- pearson_cor_long %>%
-        subset(regulon_2 == reg2 & regulon_1 != reg2 & regulon_2 != reg) %>%
-        summarise("pcc_lower" = matrixStats::count(pcc < this_pair_pcc))
+      pcc_reg2 <- pearson_cor_long %>%
+        subset(regulon_1 == reg2 & regulon_2 != reg2 & regulon_2 != reg)
 
-      csi <- (pcc_lower1$pcc_lower + pcc_lower2$pcc_lower) / ((num_regulons - 2 )*2)
+      joined_pcc <- full_join(pcc_reg1,pcc_reg2,by="regulon_2")
+      joined_pcc_csi <- joined_pcc  %>%
+        mutate("lower_pcc" = if_else((pcc.x < this_pair_pcc &
+                                        pcc.y < this_pair_pcc),"yes","no")) %>%
+        summarise("fraction_lower_pcc" = count(lower_pcc == "yes") / n())
+
+
+      csi <- joined_pcc_csi$fraction_lower_pcc
       this_csi <- data.frame("regulon_1" = reg,
                              "regulon_2" = reg2,
                              "CSI" = csi)
