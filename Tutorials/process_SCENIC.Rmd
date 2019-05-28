@@ -26,9 +26,8 @@ We provide a small test data set as part of this package, which can be found in 
 
 If any of the defintions or terms in this tutorial are unclear, please visit the SCENIC FAQ page and see whether your question is answered there already:
 
-```{r}
-https://github.com/aertslab/SCENIC/blob/master/vignettes/FAQ.md
-```
+[SCENIC FAQ](https://github.com/aertslab/SCENIC/blob/master/vignettes/FAQ.md)
+
 
 
 # Installation
