@@ -13,7 +13,7 @@ install_github("FloWuenne/scFunctions")
 
 You can find a tutorial on how to use the functions in this package to further process and analyze SCENIC results in this [tutorial]):
 
-[Processing and visualization of SCENIC results](./Tutorials/process_SCENIC.md)
+[Processing and visualization of SCENIC results](./Tutorials/process_SCENIC.html)
 
 The following functions can be used to analyze results from the SCENIC pipeline for gene regulatory networks.
 
