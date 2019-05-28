@@ -3,11 +3,7 @@ title: "Processing and visualization of SCENIC results"
 author: Florian Wuennemann
 date: March 22, 2005
 output: 
-  html_document:
-    theme: flatly
-    highlight: tango
-    toc: true
-    toc_depth: 2
+  rmarkdown::github_document
 ---
 
 ```{r setup, include=FALSE}
