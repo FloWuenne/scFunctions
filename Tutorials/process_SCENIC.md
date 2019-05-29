@@ -1,9 +1,17 @@
-Processing and visualization of SCENIC results
-================
-Florian Wuennemann
-March 22, 2005
+-   [Introduction](#introduction)
+-   [Installation](#installation)
+-   [Regulon analysis](#regulon-analysis)
+    -   [Determine AUC thresholds](#determine-auc-thresholds)
+    -   [Binarize regulons using
+        thresholds](#binarize-regulons-using-thresholds)
+    -   [Calculate Regulon Specificity Score
+        (RSS)](#calculate-regulon-specificity-score-rss)
+    -   [Calculate conecction specificity index (CSI) for all
+        regulons](#calculate-conecction-specificity-index-csi-for-all-regulons)
+-   [Session Info](#session-info)
 
-# Introduction
+Introduction
+============
 
 This tutorial will describe how to use the functions implemented in this
 package to further process the output from a typical run of the [SCENIC
@@ -12,9 +20,9 @@ that you have processed your data up until the third step of the
 pipeline. The following data will be required for completely running
 this tutorial:
 
-  - **regulonAUC** - The regulon activity scores in matrix format
+-   **regulonAUC** - The regulon activity scores in matrix format
     (output from file 3.4\_regulonAUC.Rds)
-  - **cell classifications for your cell** - For example using a
+-   **cell classifications for your cell** - For example using a
     metadata data frame from a seurat object
 
 We provide a small test data set as part of this package, which can be
@@ -31,20 +39,23 @@ there already:
 [SCENIC
 FAQ](https://github.com/aertslab/SCENIC/blob/master/vignettes/FAQ.md)
 
-# Installation
+Installation
+============
 
 You can easily install the package with the following command:
 
-# Regulon analysis
+Regulon analysis
+================
 
 Many of the analysis concepts and statistics that are calculated in this
 tutorial have been derived from a publication by [Suo et al. (2018) in
 Cell
-Reports](https://www.cell.com/cell-reports/fulltext/S2211-1247\(18\)31634-6?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS2211124718316346%3Fshowall%3Dtrue).
+Reports](https://www.cell.com/cell-reports/fulltext/S2211-1247(18)31634-6?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS2211124718316346%3Fshowall%3Dtrue).
 In their publication, they used a modified version of SCENIC to call
 regulons for the [Mouse Cell Atlas dataset](http://bis.zju.edu.cn/MCA/).
 
-## Determine AUC thresholds
+Determine AUC thresholds
+------------------------
 
 In the original implemntation of SCENIC, the authors included a function
 to determine thresholds for the AUC activity via the function:
@@ -55,7 +66,7 @@ implementation but is much faster. Please keep in mind however, that
 this function might not perform very well for setting thresholds for
 non-bimodal distribution, which are quite often observed for regulons.
 We still advise to manually check and adjust the thresholds prior to
-binarization of regulons\!
+binarization of regulons!
 
 Let us use the regulons AUC values to determine thresholds using our
 k-means function.
@@ -63,9 +74,7 @@ k-means function.
 The thresholds are saved in list format where each regulon is the name
 of the list and the AUC threshold is the value of the list.
 
-``` r
-head(kmeans_thresholds)
-```
+    head(kmeans_thresholds)
 
     ## $`Ybx1_extended (738g)`
     ## [1] 0.2018032
@@ -90,18 +99,17 @@ to determine thresholds, there are obviously more sophisticated
 approaches than this to determine thresholds in the AUC distribution.
 Feel free to develop your own approaches to determine optimal thresholds
 to binarize regulons. I would be excited to hear back if you developed
-your own function to perform this task\!
+your own function to perform this task!
 
-## Binarize regulons using thresholds
+Binarize regulons using thresholds
+----------------------------------
 
 Now that we have our thresholds, it is time to binarize the regulons
 using these thresholds.
 
 Let’s take a look at the first regulon in the binary regulon list.
 
-``` r
-head(binary_regulons$`Ybx1_extended (738g)`)
-```
+    head(binary_regulons$`Ybx1_extended (738g)`)
 
     ##                   cells Ybx1_extended (738g)
     ## 1 E14.5_r1_TTCTGACGATCT                    1
@@ -118,9 +126,7 @@ RRS scores.
 Let’s check that the data table is formatted correctly before
 proceeding:
 
-``` r
-binary_regulons_trans[1:4,1:3]
-```
+    binary_regulons_trans[1:4,1:3]
 
     ##                       E14.5_r1_TTCTGACGATCT E14.5_r1_CACAAGACGTTC
     ## Ybx1_extended (738g)                      1                     1
@@ -133,7 +139,8 @@ binary_regulons_trans[1:4,1:3]
     ## E2f1_extended (1350g)                     1
     ## E2f1 (1289g)                              1
 
-## Calculate Regulon Specificity Score (RSS)
+Calculate Regulon Specificity Score (RSS)
+-----------------------------------------
 
 We now want to use the binary regulon activity together with the cell
 assignments to see how specific each predicted regulon is for each cell
@@ -149,12 +156,9 @@ frame needs to have cell names that correspond with the binary regulon
 data frame as rownames and contain a column labeled “cell\_type”, which
 contains the assignments for all cells. For convenience, you can use the
 metadata table from a correspondin Seurat object, just make sure that
-you add a column labeled
-    “cell\_type”.
+you add a column labeled “cell\_type”.
 
-``` r
-head(metadata_sub)
-```
+    head(metadata_sub)
 
     ##                       orig.ident nCount_RNA nFeature_RNA Mouse_ID   Age
     ## E14.5_r1_TTCTGACGATCT      E14.5      10497         3394       M1 E14.5
@@ -205,9 +209,7 @@ cell types.
 The output is a data frame with a RSS score for each regulon - cell type
 combination.
 
-``` r
-head(rrs_df)
-```
+    head(rrs_df)
 
     ##                 regulon cell_type       RSS
     ## 1          Ikzf1 (638g)      RMPH 1.0000000
@@ -228,14 +230,12 @@ like to plot the high confidence regulons only or if you want to plot
 the regulons named \_extended, which also contain genes only based on
 motif prediction based on similarity.
 
-``` r
-plot_rrs_ranking(rrs_df,
-                 "RMPH",
-                 ggrepel_force = 1,
-                 ggrepel_point_padding = 0.2,
-                 top_genes = 4,
-                 plot_extended = FALSE)
-```
+    plot_rrs_ranking(rrs_df,
+                     "RMPH",
+                     ggrepel_force = 1,
+                     ggrepel_point_padding = 0.2,
+                     top_genes = 4,
+                     plot_extended = FALSE)
 
     ## Loading required package: ggrepel
 
@@ -248,15 +248,13 @@ plot_rrs_ranking(rrs_df,
     ## 
     ##     ggsave
 
-![](process_SCENIC_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](process_SCENIC_files/figure-markdown_strict/unnamed-chunk-12-1.png)
 
 We can also easily visualize all regulons over all cell types using
 heatmaps. Let’s first investigate the distribution of RSS over all cell
 types.
 
-``` r
-library(ggridges)
-```
+    library(ggridges)
 
     ## 
     ## Attaching package: 'ggridges'
@@ -265,17 +263,15 @@ library(ggridges)
     ## 
     ##     scale_discrete_manual
 
-``` r
-rrs_df_nona <- subset(rrs_df,RSS > 0)
-ggplot(rrs_df_nona,aes(RSS,cell_type, fill = cell_type)) +
-  geom_density_ridges(scale = 5, alpha = 0.75) +
-  geom_vline(xintercept = 0.1) +
-  theme(legend.position = "none")
-```
+    rrs_df_nona <- subset(rrs_df,RSS > 0)
+    ggplot(rrs_df_nona,aes(RSS,cell_type, fill = cell_type)) +
+      geom_density_ridges(scale = 5, alpha = 0.75) +
+      geom_vline(xintercept = 0.1) +
+      theme(legend.position = "none")
 
-    ## Picking joint bandwidth of 0.0137
+    ## Picking joint bandwidth of 0.0138
 
-![](process_SCENIC_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](process_SCENIC_files/figure-markdown_strict/unnamed-chunk-13-1.png)
 
 The RSS distribution clearly shows that the RSS is highly dependent upon
 the cell type we are investigating. As we can see, resident macrophages
@@ -286,24 +282,20 @@ specificty for the regulons. In this small toy example, it seems that ~
 highlighting purposes, we are gonna filter with 0.4 to be able to easily
 visualize the result in a heatmap.
 
-``` r
-rrs_df_wide <- rrs_df %>%
-  spread(cell_type,RSS)
+    rrs_df_wide <- rrs_df %>%
+      spread(cell_type,RSS)
 
-rownames(rrs_df_wide) <- rrs_df_wide$regulon 
-rrs_df_wide <- rrs_df_wide[,2:ncol(rrs_df_wide)]
+    rownames(rrs_df_wide) <- rrs_df_wide$regulon 
+    rrs_df_wide <- rrs_df_wide[,2:ncol(rrs_df_wide)]
 
-## Subset all regulons that don't have at least an RSS of 0.7 for one cell type
-rrs_df_wide_specific <- rrs_df_wide[apply(rrs_df_wide,MARGIN = 1 ,FUN =  function(x) any(x > 0.4)),]
-```
+    ## Subset all regulons that don't have at least an RSS of 0.7 for one cell type
+    rrs_df_wide_specific <- rrs_df_wide[apply(rrs_df_wide,MARGIN = 1 ,FUN =  function(x) any(x > 0.4)),]
 
 We can then visualize the regulons that show an RSS over the defined
 threshold in this example using heatmapply, a heatmap library using
 plotly.
 
-``` r
-library(heatmaply)
-```
+    library(heatmaply)
 
     ## Loading required package: plotly
 
@@ -342,15 +334,14 @@ library(heatmaply)
     ## Or contact: <tal.galili@gmail.com>
     ## ======================
 
-``` r
-heatmaply(rrs_df_wide_specific)
-```
+    heatmaply(rrs_df_wide_specific)
 
-![](process_SCENIC_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](process_SCENIC_files/figure-markdown_strict/unnamed-chunk-15-1.png)
 
 This concludes the section about RSS calculations.
 
-## Calculate conecction specificity index (CSI) for all regulons
+Calculate conecction specificity index (CSI) for all regulons
+-------------------------------------------------------------
 
 The final statistics that we want to calculate is the connection
 specificty index. The CSI is a major of connectedness between the
@@ -366,10 +357,8 @@ select high confidence regulons or run the CSI calculation only on
 \_extended regulons (calc\_extended = TRUE). Here we choose to calculate
 CSI only for high confidence regulons.
 
-``` r
-regulons_csi <- calculate_csi(regulonAUC,
-                              calc_extended = FALSE)
-```
+    regulons_csi <- calculate_csi(regulonAUC,
+                                  calc_extended = FALSE)
 
 Once we have calculated the CSI values for all regulon pairs, we can
 visualize the regulon modules using the function plot\_csi\_modules,
@@ -377,33 +366,119 @@ which will create a heatmap of the CSI values. The function has an
 argument that lets you change the number of clusters the heatmap is
 divided into via nclust.
 
-``` r
-plot_csi_modules(regulons_csi,
-                 nclust = 10)
-```
+    plot_csi_modules(regulons_csi,
+                     nclust = 10,
+                     font_size_regulons = 8)
 
     ## Loading required package: pheatmap
 
-![](process_SCENIC_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](process_SCENIC_files/figure-markdown_strict/unnamed-chunk-17-1.png)
 
 Finally, we can also export the CSI cluster modules by running the
 following code with the same cluster number we used on to create the
 heatmap.
+
+    csi_csi_wide <- regulons_csi %>%
+        spread(regulon_2,CSI)
+
+      future_rownames <- csi_csi_wide$regulon_1
+      csi_csi_wide <- as.matrix(csi_csi_wide[,2:ncol(csi_csi_wide)])
+      rownames(csi_csi_wide) <- future_rownames
+      
+    regulons_hclust <- hclust(dist(csi_csi_wide,method = "euclidean"))
+
+    clusters <- cutree(regulons_hclust,k= 10)
+    clusters_df <- data.frame("regulon" = names(clusters),
+                              "csi_cluster" = clusters)
+
+Let’s get some statistics about the different clusters, for example, how
+many regulons are in each cluster and how many genes are in each of the
+regulons to determine whether there are some clusters that feature
+larger regulons.
+
+    # Check how many regulons are in each cluster
+    clusters_df_stats <- clusters_df %>%
+      group_by(csi_cluster) %>%
+      mutate("regulon" = as.character(regulon)) %>%
+      tally()
+
+    ggplot(clusters_df_stats,aes(as.factor(csi_cluster),n,fill=as.factor(csi_cluster))) +
+      geom_bar(color= "black",stat="identity") +
+      theme(legend.position="none") +
+      scale_fill_brewer(palette = "Set3") +
+      labs(x = "HC clusters",
+           y = "# Regulons")
+
+![](process_SCENIC_files/figure-markdown_strict/unnamed-chunk-19-1.png)
+
+    ## Check average regulon size per cluster
+    clusters_df_regsizes <- clusters_df %>%
+      separate(regulon, into = c("regulon_name","regulon_size"), sep=" ") %>%
+      mutate("regulon_size" = gsub("\\(","",regulon_size)) %>%
+      mutate("regulon_size" = gsub("\\g)","",regulon_size)) %>%
+      mutate("regulon_size" = as.numeric(regulon_size))
+
+    ggplot(clusters_df_regsizes,aes(log10(regulon_size),as.factor(csi_cluster),fill=as.factor(csi_cluster))) + 
+      geom_density_ridges() +
+      scale_fill_brewer(palette = "Set3") +
+      theme(legend.position = "none")
+
+    ## Picking joint bandwidth of 0.213
+
+![](process_SCENIC_files/figure-markdown_strict/unnamed-chunk-20-1.png)
+
+    clusters_df_regsizes_summary <- clusters_df_regsizes %>%
+      group_by(csi_cluster) %>%
+      summarise("mean_regulon_size" = mean(regulon_size),
+                "median_regulon_size" = median(regulon_size),
+                "sd_regulon_size" = sd(regulon_size))
+
+    library(ggrepel)
+    ## Plot correlation between number of regulons and regulon size
+    clusters_meta <-  full_join(clusters_df_stats,clusters_df_regsizes_summary,by="csi_cluster")
+    ggplot(clusters_meta,aes(n,log10(median_regulon_size),label=as.factor(csi_cluster),fill=as.factor(csi_cluster))) +
+      geom_point(color= "black",pch= 21) +
+      geom_label_repel() +
+      theme(legend.position = "none") +
+      scale_fill_brewer(palette = "Set3")
+
+![](process_SCENIC_files/figure-markdown_strict/unnamed-chunk-21-1.png)
+
+In our toy example it seems that there is some robust correlation
+between the number of regulons in a module and the size of the regulons
+in that module. Modules with more regulons generally also seem to
+contain larger modules.
+
+Finally, let’s calculate activity scores for each csi module based on
+the specificity scores of all the regulons in that module. For this, we
+will load the AUC matrix again and calculate the mean of AUC fr each
+regulon per cell type and add up these scores per module.
+
+    calc_csi_module_activity <- function(clusters_df,
+                                         regulonAUC,
+                                         metadata_sub)
+
+      pheatmap(csi_cluster_activity_wide,
+               show_colnames = TRUE,
+               color = viridis(n = 10),
+               cluster_cols = TRUE,
+               cluster_rows = TRUE,
+               clustering_distance_rows = "euclidean",
+               clustering_distance_cols = "euclidean")
 
 This concludes the tutorial for the downstream analysis of SCENIC
 results. If you have any questions, please feel free to write me a mail
 or leave an issue on the github page. The functions written in this
 package were mainly written for own use and thus some dependencies and
 other details might not be fully defined. If you find any large bugs or
-issues, please let me know\!
+issues, please let me know!
 
-Enjoy the analysis of your SCENIC data\!
+Enjoy the analysis of your SCENIC data!
 
-# Session Info
+Session Info
+============
 
-``` r
-sessionInfo()
-```
+    sessionInfo()
 
     ## R version 3.6.0 (2019-04-26)
     ## Platform: x86_64-pc-linux-gnu (64-bit)

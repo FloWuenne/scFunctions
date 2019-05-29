@@ -253,7 +253,7 @@ In our toy example it seems that there is some robust correlation between the nu
 Finally, let's calculate activity scores for each csi module based on the specificity scores of all the regulons in that module. For this, we will load the AUC matrix again and calculate the mean of AUC fr each regulon per cell type and add up these scores per module.
 
 ```{r}
-calc_csi_module_activity <- function(clusters_df,
+csi_cluster_activity_wide <- calc_csi_module_activity(clusters_df,
                                      regulonAUC,
                                      metadata_sub)
 
