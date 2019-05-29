@@ -177,16 +177,95 @@ regulons_csi <- calculate_csi(regulonAUC,
 
 Once we have calculated the CSI values for all regulon pairs, we can visualize the regulon modules using the function plot_csi_modules, which will create a heatmap of the CSI values. The function has an argument that lets you change the number of clusters the heatmap is divided into via nclust. 
 
-```{r, width = 1200, height = 1400}
+```{r, width = 1000, height = 1200}
 plot_csi_modules(regulons_csi,
-                 nclust = 10)
+                 nclust = 10,
+                 font_size_regulons = 8)
 ```
 
 Finally, we can also export the CSI cluster modules by running the following code with the same cluster number we used on to create the heatmap.
 
 ```{r}
+csi_csi_wide <- regulons_csi %>%
+    spread(regulon_2,CSI)
 
+  future_rownames <- csi_csi_wide$regulon_1
+  csi_csi_wide <- as.matrix(csi_csi_wide[,2:ncol(csi_csi_wide)])
+  rownames(csi_csi_wide) <- future_rownames
+  
+regulons_hclust <- hclust(dist(csi_csi_wide,method = "euclidean"))
+
+clusters <- cutree(regulons_hclust,k= 10)
+clusters_df <- data.frame("regulon" = names(clusters),
+                          "csi_cluster" = clusters)
 ```
+
+Let's get some statistics about the different clusters, for example, how many regulons are in each cluster and how many genes are in each of the regulons to determine whether there are some clusters that feature larger regulons.
+
+```{r}
+# Check how many regulons are in each cluster
+clusters_df_stats <- clusters_df %>%
+  group_by(csi_cluster) %>%
+  mutate("regulon" = as.character(regulon)) %>%
+  tally()
+
+ggplot(clusters_df_stats,aes(as.factor(csi_cluster),n,fill=as.factor(csi_cluster))) +
+  geom_bar(color= "black",stat="identity") +
+  theme(legend.position="none") +
+  scale_fill_brewer(palette = "Set3") +
+  labs(x = "HC clusters",
+       y = "# Regulons")
+```
+
+```{r}
+## Check average regulon size per cluster
+clusters_df_regsizes <- clusters_df %>%
+  separate(regulon, into = c("regulon_name","regulon_size"), sep=" ") %>%
+  mutate("regulon_size" = gsub("\\(","",regulon_size)) %>%
+  mutate("regulon_size" = gsub("\\g)","",regulon_size)) %>%
+  mutate("regulon_size" = as.numeric(regulon_size))
+
+ggplot(clusters_df_regsizes,aes(log10(regulon_size),as.factor(csi_cluster),fill=as.factor(csi_cluster))) + 
+  geom_density_ridges() +
+  scale_fill_brewer(palette = "Set3") +
+  theme(legend.position = "none")
+
+clusters_df_regsizes_summary <- clusters_df_regsizes %>%
+  group_by(csi_cluster) %>%
+  summarise("mean_regulon_size" = mean(regulon_size),
+            "median_regulon_size" = median(regulon_size),
+            "sd_regulon_size" = sd(regulon_size))
+```
+
+```{r}
+library(ggrepel)
+## Plot correlation between number of regulons and regulon size
+clusters_meta <-  full_join(clusters_df_stats,clusters_df_regsizes_summary,by="csi_cluster")
+ggplot(clusters_meta,aes(n,log10(median_regulon_size),label=as.factor(csi_cluster),fill=as.factor(csi_cluster))) +
+  geom_point(color= "black",pch= 21) +
+  geom_label_repel() +
+  theme(legend.position = "none") +
+  scale_fill_brewer(palette = "Set3")
+```
+
+In our toy example it seems that there is some robust correlation between the number of regulons in a module and the size of the regulons in that module. Modules with more regulons generally also seem to contain larger modules.
+
+Finally, let's calculate activity scores for each csi module based on the specificity scores of all the regulons in that module. For this, we will load the AUC matrix again and calculate the mean of AUC fr each regulon per cell type and add up these scores per module.
+
+```{r}
+csi_cluster_activity_wide <- calc_csi_module_activity(clusters_df,
+                                     regulonAUC,
+                                     metadata_sub)
+
+  pheatmap(csi_cluster_activity_wide,
+           show_colnames = TRUE,
+           color = viridis(n = 10),
+           cluster_cols = TRUE,
+           cluster_rows = TRUE,
+           clustering_distance_rows = "euclidean",
+           clustering_distance_cols = "euclidean")
+```
+
 This concludes the tutorial for the downstream analysis of SCENIC results. If you have any questions, please feel free to write me a mail or leave an issue on the github page. The functions written in this package were mainly written for own use and thus some dependencies and other details might not be fully defined. If you find any large bugs or issues, please let me know!
 
 Enjoy the analysis of your SCENIC data!
