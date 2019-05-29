@@ -270,6 +270,16 @@ This concludes the tutorial for the downstream analysis of SCENIC results. If yo
 
 Enjoy the analysis of your SCENIC data!
 
+# Complete pipeline
+
+For convenience, if you want to run the entire pipeline on one of your datasets, here is all the code needed for this in one chunk. Please be aware that the execution of all code can take some time, based on your dataset size. For a dataset with ~ 14 cell types and 14k cells, the entire pipelines takes 5 to 10 minutes!
+
+```{r, message = FALSE,echo = FALSE, warning = FALSE,error = FALSE, results = "hide", eval = FALSE}
+## Will run complete pipeline, might take a while depending on your dataset size!
+
+```
+
+
 # Session Info
 
 ```{r}
