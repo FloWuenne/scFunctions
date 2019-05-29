@@ -1,14 +1,17 @@
 ---
 title: "Processing and visualization of SCENIC results"
 author: Florian Wuennemann
+always_allow_html: yes
 date: March 22, 2005
 output: 
   rmarkdown::github_document
+  
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(scFunctions)
+library(tidyverse)
 ```
 
 # Introduction 
@@ -25,15 +28,13 @@ If any of the defintions or terms in this tutorial are unclear, please visit the
 [SCENIC FAQ](https://github.com/aertslab/SCENIC/blob/master/vignettes/FAQ.md)
 
 
-
 # Installation
 
 You can easily install the package with the following command:
 
-```{r}
+```{r, message = FALSE,echo = FALSE, warning = FALSE,error = FALSE, results = "hide", eval = FALSE}
 library(devtools)
 install_github("FloWuenne/scFunctions")
-library(tidyverse)
 ```
 
 # Regulon analysis 
@@ -139,7 +140,7 @@ ggplot(rrs_df_nona,aes(RSS,cell_type, fill = cell_type)) +
   theme(legend.position = "none")
 ```
 
-The RSS distribution clearly shows that the RSS is highly dependent upon the cell type we are investigating. As we can see, resident macrophages show very high and specific RSS, while other cell types for which more similar cell types exist in the dataset, like cardiomyocytes show less specificty for the regulons. In this small toy example, it seems that ~ 0.05 - 0.1 will capture specific regulons for most cell types.
+The RSS distribution clearly shows that the RSS is highly dependent upon the cell type we are investigating. As we can see, resident macrophages show very high and specific RSS, while other cell types for which more similar cell types exist in the dataset, like cardiomyocytes show less specificty for the regulons. In this small toy example, it seems that ~ 0.05 - 0.1 will capture specific regulons for most cell types. For highlighting purposes, we are gonna filter with 0.4 to be able to easily visualize the result in a heatmap.
 
 ```{r}
 rrs_df_wide <- rrs_df %>%
@@ -149,12 +150,12 @@ rownames(rrs_df_wide) <- rrs_df_wide$regulon
 rrs_df_wide <- rrs_df_wide[,2:ncol(rrs_df_wide)]
 
 ## Subset all regulons that don't have at least an RSS of 0.7 for one cell type
-rrs_df_wide_specific <- rrs_df_wide[apply(rrs_df_wide,MARGIN = 1 ,FUN =  function(x) any(x > 0.05)),]
+rrs_df_wide_specific <- rrs_df_wide[apply(rrs_df_wide,MARGIN = 1 ,FUN =  function(x) any(x > 0.4)),]
 ```
 
-We can then visualize the regulons that show an RSS over the defined threshold of 0.05 in this example using heatmapply, a heatmap library using plotly.
+We can then visualize the regulons that show an RSS over the defined threshold in this example using heatmapply, a heatmap library using plotly.
 
-```{r, message = FALSE,echo = FALSE, warning = FALSE,error = FALSE, results = "hide"}
+```{r, width = 800, height = 1400}
 library(heatmaply)
 
 heatmaply(rrs_df_wide_specific)
@@ -164,4 +165,15 @@ This concludes the section about RSS calculations.
 
 ## Calculate conecction specificity index (CSI) for all regulons
 
-The final statistics that we want to calculate is the connection specificty index. 
+The final statistics that we want to calculate is the connection specificty index. The CSI is a major of connectedness between the different regulons. Regulons that share high CSI likely are co-regulating downstream genes and are together responsible for cell function. You can read more about the theoretical details of CSI here:
+
+[GAIN](http://lovelace.cs.umn.edu/similarity_index/guide.php)
+
+We can calculate the CSI scores for all regulon pairs based on the AUCs matrix for all regulons. Again, this function has a switch to either select high confidence regulons or run the CSI calculation only on _extended regulons (calc_extended = TRUE).
+
+```{r, message = FALSE,echo = TRUE, warning = FALSE, error = FALSE, results = "hide", eval = FALSE}
+regulons_csi <- calculate_csi(regulonAUC)
+```
+
+
+

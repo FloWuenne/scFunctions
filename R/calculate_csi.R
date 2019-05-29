@@ -6,9 +6,18 @@
 #' @examples
 #' regulon_thresholds <- auc_thresh_kmeans(regulonAUC)
 
-calculate_csi <- function(regulonAUC){
+calculate_csi <- function(regulonAUC,
+                          calc_extended = FALSE){
 
   require(tidyverse)
+
+  if(calc_extended == TRUE){
+    regulonAUC_sub <- subset(regulonAUC,grepl("extended",rownames(regulonAUC)))
+  } else if (calc_extended == FALSE){
+
+    regulonAUC_sub <- subset(regulonAUC,grepl("extended",rownames(regulonAUC)))
+}
+
 
   regulonAUC_sub <- t(regulonAUC@assays$data@listData$AUC)
 
@@ -40,11 +49,11 @@ calculate_csi <- function(regulonAUC){
       joined_pcc <- full_join(pcc_reg1,pcc_reg2,by="regulon_2")
       joined_pcc_csi <- joined_pcc  %>%
         mutate("lower_pcc" = if_else((pcc.x < this_pair_pcc &
-                                        pcc.y < this_pair_pcc),"yes","no")) %>%
-        summarise("fraction_lower_pcc" = count(lower_pcc == "yes") / n())
+                                        pcc.y < this_pair_pcc),"yes","no"))
 
+      fraction_lower_pcc <- nrow(subset(joined_pcc_csi,lower_pcc == "yes")) / nrow(joined_pcc_csi)
 
-      csi <- joined_pcc_csi$fraction_lower_pcc
+      csi <- fraction_lower_pcc
       this_csi <- data.frame("regulon_1" = reg,
                              "regulon_2" = reg2,
                              "CSI" = csi)

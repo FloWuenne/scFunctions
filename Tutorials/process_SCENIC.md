@@ -35,69 +35,6 @@ FAQ](https://github.com/aertslab/SCENIC/blob/master/vignettes/FAQ.md)
 
 You can easily install the package with the following command:
 
-``` r
-library(devtools)
-install_github("FloWuenne/scFunctions")
-```
-
-    ## Downloading GitHub repo FloWuenne/scFunctions@master
-
-    ##   
-       checking for file ‘/tmp/RtmpGifYdh/remotes7922648dff16/FloWuenne-scFunctions-05a0b89/DESCRIPTION’ ...
-      
-    ✔  checking for file ‘/tmp/RtmpGifYdh/remotes7922648dff16/FloWuenne-scFunctions-05a0b89/DESCRIPTION’
-    ## 
-      
-    ─  preparing ‘scFunctions’:
-    ## 
-      
-       checking DESCRIPTION meta-information ...
-      
-    ✔  checking DESCRIPTION meta-information
-    ## 
-      
-    ─  checking for LF line-endings in source and make files and shell scripts
-    ## 
-      
-    ─  checking for empty or unneeded directories
-    ## 
-      
-         NB: this package now depends on R (>= 3.5.0)
-    ## 
-      
-         WARNING: Added dependency on R >= 3.5.0 because serialized objects in  serialize/load version 3 cannot be read in older versions of R.  File(s) containing such objects:  'scFunctions/example_data/metadata_sub.Rds'  WARNING: Added dependency on R >= 3.5.0 because serialized objects in  serialize/load version 3 cannot be read in older versions of R.  File(s) containing such objects:  'scFunctions/example_data/regulonAUC_subset.Rds'
-    ## 
-      
-    ─  building 'scFunctions_0.0.0.9000.tar.gz'
-    ## 
-      
-       
-    ## 
-
-    ## Installing package into '/home/florian/R/x86_64-pc-linux-gnu-library/3.6'
-    ## (as 'lib' is unspecified)
-
-``` r
-library(tidyverse)
-```
-
-    ## Registered S3 methods overwritten by 'ggplot2':
-    ##   method         from 
-    ##   [.quosures     rlang
-    ##   c.quosures     rlang
-    ##   print.quosures rlang
-
-    ## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
-
-    ## ✔ ggplot2 3.1.1     ✔ purrr   0.3.2
-    ## ✔ tibble  2.1.1     ✔ dplyr   0.8.1
-    ## ✔ tidyr   0.8.3     ✔ stringr 1.4.0
-    ## ✔ readr   1.3.1     ✔ forcats 0.4.0
-
-    ## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-
 # Regulon analysis
 
 Many of the analysis concepts and statistics that are calculated in this
@@ -275,10 +212,10 @@ head(rrs_df)
     ##                 regulon cell_type       RSS
     ## 1          Ikzf1 (638g)      RMPH 1.0000000
     ## 2 Ikzf1_extended (882g)      RMPH 0.8211780
-    ## 3         Arid3a (275g)      RMPH 0.8151686
-    ## 4 Runx3_extended (204g)      RMPH 0.8151686
-    ## 5           Foxc1 (58g)     ENDO1 0.7794728
-    ## 6   Fev_extended (195g)     ENDO1 0.7532211
+    ## 3 Runx3_extended (204g)      RMPH 0.8151686
+    ## 4           Foxc1 (58g)     ENDO1 0.7794728
+    ## 5   Fev_extended (195g)     ENDO1 0.7532211
+    ## 6   Mycn_extended (17g)      VCM1 0.7044754
 
 We can visualize the RSS by performing ranking on the RSS scores with
 the most specific regulons ranking the highest per cell type. I have
@@ -345,7 +282,9 @@ the cell type we are investigating. As we can see, resident macrophages
 show very high and specific RSS, while other cell types for which more
 similar cell types exist in the dataset, like cardiomyocytes show less
 specificty for the regulons. In this small toy example, it seems that ~
-0.05 - 0.1 will capture specific regulons for most cell types.
+0.05 - 0.1 will capture specific regulons for most cell types. For
+highlighting purposes, we are gonna filter with 0.4 to be able to easily
+visualize the result in a heatmap.
 
 ``` r
 rrs_df_wide <- rrs_df %>%
@@ -355,16 +294,77 @@ rownames(rrs_df_wide) <- rrs_df_wide$regulon
 rrs_df_wide <- rrs_df_wide[,2:ncol(rrs_df_wide)]
 
 ## Subset all regulons that don't have at least an RSS of 0.7 for one cell type
-rrs_df_wide_specific <- rrs_df_wide[apply(rrs_df_wide,MARGIN = 1 ,FUN =  function(x) any(x > 0.05)),]
+rrs_df_wide_specific <- rrs_df_wide[apply(rrs_df_wide,MARGIN = 1 ,FUN =  function(x) any(x > 0.4)),]
 ```
 
 We can then visualize the regulons that show an RSS over the defined
-threshold of 0.05 in this example using heatmapply, a heatmap library
-using plotly.
+threshold in this example using heatmapply, a heatmap library using
+plotly.
+
+``` r
+library(heatmaply)
+```
+
+    ## Loading required package: plotly
+
+    ## 
+    ## Attaching package: 'plotly'
+
+    ## The following object is masked from 'package:ggplot2':
+    ## 
+    ##     last_plot
+
+    ## The following object is masked from 'package:stats':
+    ## 
+    ##     filter
+
+    ## The following object is masked from 'package:graphics':
+    ## 
+    ##     layout
+
+    ## Loading required package: viridis
+
+    ## Loading required package: viridisLite
+
+    ## Registered S3 method overwritten by 'seriation':
+    ##   method         from 
+    ##   reorder.hclust gclus
+
+    ## 
+    ## ======================
+    ## Welcome to heatmaply version 0.16.0
+    ## 
+    ## Type citation('heatmaply') for how to cite the package.
+    ## Type ?heatmaply for the main documentation.
+    ## 
+    ## The github page is: https://github.com/talgalili/heatmaply/
+    ## Please submit your suggestions and bug-reports at: https://github.com/talgalili/heatmaply/issues
+    ## Or contact: <tal.galili@gmail.com>
+    ## ======================
+
+``` r
+heatmaply(rrs_df_wide_specific)
+```
+
+![](process_SCENIC_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 This concludes the section about RSS calculations.
 
 ## Calculate conecction specificity index (CSI) for all regulons
 
 The final statistics that we want to calculate is the connection
-specificty index.
+specificty index. The CSI is a major of connectedness between the
+different regulons. Regulons that share high CSI likely are
+co-regulating downstream genes and are together responsible for cell
+function. You can read more about the theoretical details of CSI here:
+
+[GAIN](http://lovelace.cs.umn.edu/similarity_index/guide.php)
+
+We can calculate the CSI scores for all regulon pairs based on the AUCs
+matrix for all regulons. Again, this function has a switch to either
+select high confidence regulons or run the CSI calculation only on
+\_extended regulons (calc\_extended = TRUE).
+
+``` r
+regulons_csi <- calculate_csi(regulonAUC)
+```

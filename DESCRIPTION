@@ -8,3 +8,13 @@ License: WGPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1.9000
+Imports: 
+  philentropy,
+  SCENIC,
+  svMisc,
+  dplyr,
+  tidyr,
+  SCENIC,
+  ggrepel,
+  ggplot2,
+  cowplot
