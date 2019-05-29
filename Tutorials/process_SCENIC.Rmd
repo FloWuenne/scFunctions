@@ -155,9 +155,8 @@ rrs_df_wide_specific <- rrs_df_wide[apply(rrs_df_wide,MARGIN = 1 ,FUN =  functio
 
 We can then visualize the regulons that show an RSS over the defined threshold in this example using heatmapply, a heatmap library using plotly.
 
-```{r, width = 800, height = 1400}
+```{r, width = 1200, height = 1400}
 library(heatmaply)
-
 heatmaply(rrs_df_wide_specific)
 ```
 
@@ -169,11 +168,32 @@ The final statistics that we want to calculate is the connection specificty inde
 
 [GAIN](http://lovelace.cs.umn.edu/similarity_index/guide.php)
 
-We can calculate the CSI scores for all regulon pairs based on the AUCs matrix for all regulons. Again, this function has a switch to either select high confidence regulons or run the CSI calculation only on _extended regulons (calc_extended = TRUE).
+We can calculate the CSI scores for all regulon pairs based on the AUCs matrix for all regulons. Again, this function has a switch to either select high confidence regulons or run the CSI calculation only on _extended regulons (calc_extended = TRUE). Here we choose to calculate CSI only for high confidence regulons.
 
-```{r, message = FALSE,echo = TRUE, warning = FALSE, error = FALSE, results = "hide", eval = FALSE}
-regulons_csi <- calculate_csi(regulonAUC)
+```{r}
+regulons_csi <- calculate_csi(regulonAUC,
+                              calc_extended = FALSE)
 ```
 
+Once we have calculated the CSI values for all regulon pairs, we can visualize the regulon modules using the function plot_csi_modules, which will create a heatmap of the CSI values. The function has an argument that lets you change the number of clusters the heatmap is divided into via nclust. 
 
+```{r, width = 1200, height = 1400}
+plot_csi_modules(regulons_csi,
+                 nclust = 10)
+```
+
+Finally, we can also export the CSI cluster modules by running the following code with the same cluster number we used on to create the heatmap.
+
+```{r}
+
+```
+This concludes the tutorial for the downstream analysis of SCENIC results. If you have any questions, please feel free to write me a mail or leave an issue on the github page. The functions written in this package were mainly written for own use and thus some dependencies and other details might not be fully defined. If you find any large bugs or issues, please let me know!
+
+Enjoy the analysis of your SCENIC data!
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
 

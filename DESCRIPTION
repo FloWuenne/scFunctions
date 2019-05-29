@@ -17,4 +17,7 @@ Imports:
   SCENIC,
   ggrepel,
   ggplot2,
-  cowplot
+  cowplot,
+  tidyverse,
+  pheatmap,
+  viridis

@@ -26,3 +26,7 @@ The following functions can be used to analyze results from the SCENIC pipeline 
 **plot_rrs_ranking()**
 
 **plot_bin_regulon_UMAP()**
+
+**calculate_csi()**
+
+**plot_csi_modules()**

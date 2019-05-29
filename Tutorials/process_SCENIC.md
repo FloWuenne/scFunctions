@@ -366,5 +366,12 @@ select high confidence regulons or run the CSI calculation only on
 \_extended regulons (calc\_extended = TRUE).
 
 ``` r
-regulons_csi <- calculate_csi(regulonAUC)
+regulons_csi <- calculate_csi(regulonAUC,
+                              calc_extended = FALSE)
 ```
+
+``` r
+plot_csi_modules(regulons_csi)
+```
+
+    ## NULL
