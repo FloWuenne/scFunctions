@@ -21,12 +21,17 @@ The following functions can be used to analyze results from the SCENIC pipeline 
 
 **binarize_regulons()**
 
+**calc_csi_module_activtiy()**
+
 **calculate_rrs()**
+
+**calculate_csi()**
 
 **plot_rrs_ranking()**
 
 **plot_bin_regulon_UMAP()**
 
-**calculate_csi()**
 
 **plot_csi_modules()**
+
+

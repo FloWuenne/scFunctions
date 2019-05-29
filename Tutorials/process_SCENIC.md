@@ -508,7 +508,78 @@ For convenience, if you want to run the entire pipeline on one of your
 datasets, here is all the code needed for this in one chunk. Please be
 aware that the execution of all code can take some time, based on your
 dataset size. For a dataset with ~ 14 cell types and 14k cells, the
-entire pipelines takes 5 to 10 minutes\!
+entire pipelines takes 5 to 10
+minutes\!
+
+``` r
+## Will run complete pipeline, might take a while depending on your dataset size!
+library(scFunctions)
+library(tidyverse)
+
+regulonAUC <- readRDS("../example_data/regulonAUC_subset.Rds")
+metadata_sub <- readRDS("../example_data/metadata_sub.Rds")
+number_of_regulon_clusters <- 10
+
+## Binary regulons
+kmeans_thresholds <- auc_thresh_kmeans(regulonAUC)
+binary_regulons <- binarize_regulons(regulonAUC,kmeans_thresholds)
+
+joined_bin_reg <- binary_regulons %>%
+    reduce(left_join,by="cells")
+
+rownames(joined_bin_reg) <- joined_bin_reg$cells
+joined_bin_reg <- joined_bin_reg[2:ncol(joined_bin_reg)]
+
+binary_regulons_trans <- as.matrix(t(joined_bin_reg))
+
+## RRS
+rrs_df <- calculate_rrs(metadata_sub,
+              binary_regulons = binary_regulons_trans)
+
+rrs_df_wide <- rrs_df %>%
+  spread(cell_type,RSS)
+
+rownames(rrs_df_wide) <- rrs_df_wide$regulon
+rrs_df_wide <- rrs_df_wide[,2:ncol(rrs_df_wide)]
+
+## Subset all regulons that don't have at least an RSS of X for one cell type
+rrs_df_wide_specific <- rrs_df_wide[apply(rrs_df_wide,MARGIN = 1 ,FUN =  function(x) any(x > 0.4)),]
+
+## CSI
+regulons_csi <- calculate_csi(regulonAUC,
+                              calc_extended = FALSE,
+                              verbose = FALSE)
+
+plot_csi_modules(regulons_csi,
+                 nclust = number_of_regulon_clusters,
+                 font_size_regulons = 8)
+
+csi_csi_wide <- regulons_csi %>%
+    spread(regulon_2,CSI)
+
+  future_rownames <- csi_csi_wide$regulon_1
+  csi_csi_wide <- as.matrix(csi_csi_wide[,2:ncol(csi_csi_wide)])
+  rownames(csi_csi_wide) <- future_rownames
+  
+regulons_hclust <- hclust(dist(csi_csi_wide,method = "euclidean"))
+
+clusters <- cutree(regulons_hclust,k= number_of_regulon_clusters)
+clusters_df <- data.frame("regulon" = names(clusters),
+                          "csi_cluster" = clusters)
+
+## CSI Cluster activity
+csi_cluster_activity_wide <- calc_csi_module_activity(clusters_df,
+                                     regulonAUC,
+                                     metadata_sub)
+
+  pheatmap(csi_cluster_activity_wide,
+           show_colnames = TRUE,
+           color = viridis(n = 10),
+           cluster_cols = TRUE,
+           cluster_rows = TRUE,
+           clustering_distance_rows = "euclidean",
+           clustering_distance_cols = "euclidean")
+```
 
 # Session Info
 
