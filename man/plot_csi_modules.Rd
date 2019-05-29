@@ -2,22 +2,23 @@
 % Please edit documentation in R/plot_csi_modules.R
 \name{plot_csi_modules}
 \alias{plot_csi_modules}
-\title{Plots a heatmap and clustergram for the connection specificty indices for all regulons.}
+\title{Plots a heatmap for the connection specificty indices for all regulons.}
 \usage{
-plot_csi_modules(csi_df, csi_threshold = 0.7)
+plot_csi_modules(csi_df, nclust = 10, font_size_regulons = 6)
 }
 \arguments{
 \item{csi_df}{Data frame containing CSI values for all pairwise regulons.}
+
+\item{nclust}{Number of clusters to divide the heatmap into}
+
+\item{font_size_regulons}{Font size for regulon names.}
 }
 \description{
-Plots a heatmap and clustergram for the connection specificty indices for all regulons.
+Plots a heatmap for the connection specificty indices for all regulons.
 }
 \examples{
-regulon_thresholds <- auc_thresh_kmeans(regulonAUC)
+
 }
+\keyword{CSI}
 \keyword{SCENIC,}
-\keyword{activity,}
-\keyword{binary}
-\keyword{kmeans,}
 \keyword{regulons,}
-\keyword{thresholds}

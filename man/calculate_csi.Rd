@@ -4,7 +4,7 @@
 \alias{calculate_csi}
 \title{Calculates CSI values for all regulon pairs}
 \usage{
-calculate_csi(regulonAUC)
+calculate_csi(regulonAUC, calc_extended = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{regulonAUC}{The AUC values for all regulons as calculated by SCENIC (content of file:3.4_regulonAUC.Rds).}
