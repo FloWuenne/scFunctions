@@ -60,6 +60,29 @@ binarization of regulons\!
 Let us use the regulons AUC values to determine thresholds using our
 k-means function.
 
+``` r
+regulonAUC <- readRDS("../example_data/regulonAUC_subset.Rds")
+kmeans_thresholds <- auc_thresh_kmeans(regulonAUC)
+```
+
+    ## Loading required package: SCENIC
+
+    ## Registered S3 method overwritten by 'R.oo':
+    ##   method        from       
+    ##   throw.default R.methodsS3
+
+    ## Loading required package: svMisc
+
+    ## 
+    ## Attaching package: 'svMisc'
+
+    ## The following object is masked from 'package:utils':
+    ## 
+    ##     ?
+
+    ## [1] "Processing regulon distributions..."
+    ## Progress:   1%  Progress:   2%  Progress:   3%  Progress:   4%  Progress:   5%  Progress:   6%  Progress:   7%  Progress:   8%  Progress:   9%  Progress:  10%  Progress:  11%  Progress:  12%  Progress:  13%  Progress:  14%  Progress:  15%  Progress:  16%  Progress:  17%  Progress:  18%  Progress:  19%  Progress:  20%  Progress:  21%  Progress:  22%  Progress:  23%  Progress:  24%  Progress:  25%  Progress:  26%  Progress:  27%  Progress:  28%  Progress:  29%  Progress:  30%  Progress:  31%  Progress:  32%  Progress:  33%  Progress:  34%  Progress:  35%  Progress:  36%  Progress:  37%  Progress:  38%  Progress:  39%  Progress:  40%  Progress:  41%  Progress:  42%  Progress:  43%  Progress:  44%  Progress:  45%  Progress:  46%  Progress:  47%  Progress:  48%  Progress:  49%  Progress:  50%  Progress:  51%  Progress:  52%  Progress:  53%  Progress:  54%  Progress:  55%  Progress:  56%  Progress:  57%  Progress:  58%  Progress:  59%  Progress:  60%  Progress:  61%  Progress:  62%  Progress:  63%  Progress:  64%  Progress:  65%  Progress:  66%  Progress:  67%  Progress:  68%  Progress:  69%  Progress:  70%  Progress:  71%  Progress:  72%  Progress:  73%  Progress:  74%  Progress:  75%  Progress:  76%  Progress:  77%  Progress:  78%  Progress:  79%  Progress:  80%  Progress:  81%  Progress:  82%  Progress:  83%  Progress:  84%  Progress:  85%  Progress:  86%  Progress:  87%  Progress:  88%  Progress:  89%  Progress:  90%  Progress:  91%  Progress:  92%  Progress:  93%  Progress:  94%  Progress:  95%  Progress:  96%  Progress:  97%  Progress:  98%  Progress:  99%  Progress: 100%                  [1] "Done evaluating thresholds..."
+
 The thresholds are saved in list format where each regulon is the name
 of the list and the AUC threshold is the value of the list.
 
@@ -95,7 +118,14 @@ your own function to perform this task\!
 ## Binarize regulons using thresholds
 
 Now that we have our thresholds, it is time to binarize the regulons
-using these thresholds.
+using these
+    thresholds.
+
+``` r
+binary_regulons <- binarize_regulons(regulonAUC,kmeans_thresholds)
+```
+
+    ## Progress:   1%  Progress:   2%  Progress:   3%  Progress:   4%  Progress:   5%  Progress:   6%  Progress:   7%  Progress:   8%  Progress:   9%  Progress:  10%  Progress:  11%  Progress:  12%  Progress:  13%  Progress:  14%  Progress:  15%  Progress:  16%  Progress:  17%  Progress:  18%  Progress:  19%  Progress:  20%  Progress:  21%  Progress:  22%  Progress:  23%  Progress:  24%  Progress:  25%  Progress:  26%  Progress:  27%  Progress:  28%  Progress:  29%  Progress:  30%  Progress:  31%  Progress:  32%  Progress:  33%  Progress:  34%  Progress:  35%  Progress:  36%  Progress:  37%  Progress:  38%  Progress:  39%  Progress:  40%  Progress:  41%  Progress:  42%  Progress:  43%  Progress:  44%  Progress:  45%  Progress:  46%  Progress:  47%  Progress:  48%  Progress:  49%  Progress:  50%  Progress:  51%  Progress:  52%  Progress:  53%  Progress:  54%  Progress:  55%  Progress:  56%  Progress:  57%  Progress:  58%  Progress:  59%  Progress:  60%  Progress:  61%  Progress:  62%  Progress:  63%  Progress:  64%  Progress:  65%  Progress:  66%  Progress:  67%  Progress:  68%  Progress:  69%  Progress:  70%  Progress:  71%  Progress:  72%  Progress:  73%  Progress:  74%  Progress:  75%  Progress:  76%  Progress:  77%  Progress:  78%  Progress:  79%  Progress:  80%  Progress:  81%  Progress:  82%  Progress:  83%  Progress:  84%  Progress:  85%  Progress:  86%  Progress:  87%  Progress:  88%  Progress:  89%  Progress:  90%  Progress:  91%  Progress:  92%  Progress:  93%  Progress:  94%  Progress:  95%  Progress:  96%  Progress:  97%  Progress:  98%  Progress:  99%  Progress: 100%                  
 
 Let’s take a look at the first regulon in the binary regulon list.
 
@@ -161,6 +191,10 @@ contains the assignments for all cells. For convenience, you can use the
 metadata table from a correspondin Seurat object, just make sure that
 you add a column labeled
     “cell\_type”.
+
+``` r
+metadata_sub <- readRDS("../example_data/metadata_sub.Rds")
+```
 
 ``` r
 head(metadata_sub)
@@ -283,7 +317,7 @@ ggplot(rrs_df_nona,aes(RSS,cell_type, fill = cell_type)) +
   theme(legend.position = "none")
 ```
 
-    ## Picking joint bandwidth of 0.0138
+    ## Picking joint bandwidth of 0.0137
 
 ![](process_SCENIC_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 

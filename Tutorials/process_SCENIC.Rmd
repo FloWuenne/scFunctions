@@ -47,7 +47,7 @@ In the original implemntation of SCENIC, the authors included a function to dete
 
 Let us use the regulons AUC values to determine thresholds using our k-means function. 
 
-```{r, message = FALSE,echo = FALSE, warning = FALSE,error = FALSE, results = "hide"}
+```{r}
 regulonAUC <- readRDS("../example_data/regulonAUC_subset.Rds")
 kmeans_thresholds <- auc_thresh_kmeans(regulonAUC)
 ```
@@ -64,7 +64,7 @@ While we use a sample k-means clustering approache with 2 clusters here to deter
 
 Now that we have our thresholds, it is time to binarize the regulons using these thresholds.
 
-```{r, message = FALSE,echo = FALSE, warning = FALSE,error = FALSE, results = "hide"}
+```{r}
 binary_regulons <- binarize_regulons(regulonAUC,kmeans_thresholds)
 ```
 Let's take a look at the first regulon in the binary regulon list.
@@ -97,7 +97,7 @@ We now want to use the binary regulon activity together with the cell assignment
 
 First, we need to load the cell assignments as a data frame. This data frame needs to have cell names that correspond with the binary regulon data frame as rownames and contain a column labeled "cell_type", which contains the assignments for all cells. For convenience, you can use the metadata table from a correspondin Seurat object, just make sure that you add a column labeled "cell_type".
 
-```{r, message = FALSE,echo = FALSE, warning = FALSE,error = FALSE, results = "hide"}
+```{r}
 metadata_sub <- readRDS("../example_data/metadata_sub.Rds")
 ```
 ```{r}
