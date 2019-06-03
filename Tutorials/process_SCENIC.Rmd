@@ -75,7 +75,7 @@ head(binary_regulons$`Ybx1_extended (738g)`)
 
 Next, we have to reformat the binary regulons into a big data frame that contains all of the binary regulons so that we can use them to calculate RRS scores.
 
-```{r, message = FALSE,echo = FALSE, warning = FALSE,error = FALSE, results = "hide"}
+```{r}
 joined_bin_reg <- binary_regulons %>%
     reduce(left_join,by="cells")
 

@@ -115,6 +115,16 @@ Next, we have to reformat the binary regulons into a big data frame that
 contains all of the binary regulons so that we can use them to calculate
 RRS scores.
 
+``` r
+joined_bin_reg <- binary_regulons %>%
+    reduce(left_join,by="cells")
+
+rownames(joined_bin_reg) <- joined_bin_reg$cells
+joined_bin_reg <- joined_bin_reg[2:ncol(joined_bin_reg)]
+
+binary_regulons_trans <- as.matrix(t(joined_bin_reg))
+```
+
 Let’s check that the data table is formatted correctly before
 proceeding:
 
@@ -612,19 +622,19 @@ sessionInfo()
     ##  [7] cowplot_0.9.4          ggrepel_0.8.1          philentropy_0.3.0     
     ## [10] svMisc_1.1.0           SCENIC_1.0.1-01        forcats_0.4.0         
     ## [13] stringr_1.4.0          dplyr_0.8.1            purrr_0.3.2           
-    ## [16] readr_1.3.1            tidyr_0.8.3            tibble_2.1.1          
+    ## [16] readr_1.3.1            tidyr_0.8.3            tibble_2.1.2          
     ## [19] ggplot2_3.1.1          tidyverse_1.2.1        scFunctions_0.0.0.9000
     ## 
     ## loaded via a namespace (and not attached):
     ##   [1] colorspace_1.4-1            XVector_0.24.0             
     ##   [3] GenomicRanges_1.36.0        rstudioapi_0.10            
-    ##   [5] bit64_0.9-7                 AnnotationDbi_1.44.0       
+    ##   [5] bit64_0.9-7                 AnnotationDbi_1.46.0       
     ##   [7] lubridate_1.7.4             xml2_1.2.0                 
     ##   [9] codetools_0.2-16            R.methodsS3_1.7.1          
     ##  [11] knitr_1.23                  jsonlite_1.6               
-    ##  [13] broom_0.5.2                 annotate_1.60.1            
+    ##  [13] broom_0.5.2                 annotate_1.62.0            
     ##  [15] cluster_2.0.9               R.oo_1.22.0                
-    ##  [17] graph_1.60.0                shiny_1.3.2                
+    ##  [17] graph_1.62.0                shiny_1.3.2                
     ##  [19] compiler_3.6.0              httr_1.4.0                 
     ##  [21] backports_1.1.4             assertthat_0.2.1           
     ##  [23] Matrix_1.2-17               lazyeval_0.2.2             
@@ -647,7 +657,7 @@ sessionInfo()
     ##  [57] memoise_1.1.0               gridExtra_2.3              
     ##  [59] stringi_1.4.3               RSQLite_2.1.1              
     ##  [61] gclus_1.3.2                 S4Vectors_0.22.0           
-    ##  [63] foreach_1.4.4               seriation_1.2-3            
+    ##  [63] foreach_1.4.4               seriation_1.2-5            
     ##  [65] caTools_1.17.1.2            BiocGenerics_0.30.0        
     ##  [67] BiocParallel_1.18.0         GenomeInfoDb_1.20.0        
     ##  [69] rlang_0.3.4                 pkgconfig_2.0.2            
@@ -656,9 +666,9 @@ sessionInfo()
     ##  [75] lattice_0.20-38             htmlwidgets_1.3            
     ##  [77] labeling_0.3                processx_3.3.1             
     ##  [79] bit_1.1-14                  tidyselect_0.2.5           
-    ##  [81] GSEABase_1.44.0             plyr_1.8.4                 
+    ##  [81] GSEABase_1.46.0             plyr_1.8.4                 
     ##  [83] magrittr_1.5                R6_2.4.0                   
-    ##  [85] gplots_3.0.1.1              IRanges_2.18.0             
+    ##  [85] gplots_3.0.1.1              IRanges_2.18.1             
     ##  [87] generics_0.0.2              DelayedArray_0.10.0        
     ##  [89] DBI_1.0.0                   pillar_1.4.1               
     ##  [91] haven_2.1.0                 withr_2.1.2                
