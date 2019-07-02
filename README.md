@@ -15,23 +15,4 @@ You can find a tutorial on how to use the functions in this package to further p
 
 [Processing and visualization of SCENIC results](./Tutorials/process_SCENIC.md)
 
-The following functions can be used to analyze results from the SCENIC pipeline for gene regulatory networks.
-
-**auc_thresh_kmeans()**
-
-**binarize_regulons()**
-
-**calc_csi_module_activtiy()**
-
-**calculate_rrs()**
-
-**calculate_csi()**
-
-**plot_rrs_ranking()**
-
-**plot_bin_regulon_UMAP()**
-
-
-**plot_csi_modules()**
-
 
