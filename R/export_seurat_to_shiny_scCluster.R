@@ -12,7 +12,6 @@ export_seurat_to_shiny_scCluster <- function(seurat_object,
                                              seurat_object_version = "v3",
                                              embedding_used = "UMAP",
                                              data_slot = "RNA",
-                                             marker_table,
                                              export_dir = "."){
 
   ## Load libraries
@@ -65,7 +64,11 @@ export_seurat_to_shiny_scCluster <- function(seurat_object,
   }
   gene_names_df <- data.frame("genes" = gene_names)
 
+  ## Format sparse matrix for presto marker calculation
+
   #Write files
+  cell_embeddings_with_expression <- cell_embeddings_with_expression[,gene_names_df$genes]
+  cell_embeddings_with_expression_transposed_sparse <- as(t(cell_embeddings_with_expression), "sparseMatrix")
 
   ## Write file containing embeddings and gene expression
   write_feather(cell_embeddings_with_expression,
@@ -80,8 +83,9 @@ export_seurat_to_shiny_scCluster <- function(seurat_object,
          file = paste(export_dir,"shiny_gene_names.tsv",sep="/"))
 
   ## Write marker table
-  fwrite(marker_table,
-         file = paste(export_dir,"shiny_marker_table.tsv",sep="/"))
+  saveRDS(cell_embeddings_with_expression_transposed_sparse,
+         file = paste(export_dir,"shiny_user_clustering.sparse_presto.rds",sep="/"),
+         version = "2") ## This depends on the R kernel that is running on the galaxy and on the singularity container!
 
   cat("\n Successfully transformed data! \n")
 
