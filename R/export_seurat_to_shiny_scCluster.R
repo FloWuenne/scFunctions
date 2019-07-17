@@ -21,8 +21,6 @@ export_seurat_to_shiny_scCluster <- function(seurat_object,
   require("data.table")
   require("dplyr")
 
-  ##
-  marker_table
 
     if(seurat_object_version == "v2"){
       seurat_object <- UpdateSeuratObject(seurat_object)
@@ -52,7 +50,7 @@ export_seurat_to_shiny_scCluster <- function(seurat_object,
   cell_embeddings_with_expression <- cell_embeddings_with_expression[2:ncol(cell_embeddings_with_expression)]
   cell_embeddings_with_expression <- merge(cell_embeddings_with_expression,norm_data,by=0)
 
-  ## make a tibble for clustering solutions
+  ## make a tibble for clustering solutiosn
   clustering_solutions <- cell_embeddings_with_expression %>%
     select(cell_classification)
 
