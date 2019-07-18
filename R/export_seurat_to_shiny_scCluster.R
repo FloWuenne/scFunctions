@@ -65,8 +65,8 @@ export_seurat_to_shiny_scCluster <- function(seurat_object,
   ## Format sparse matrix for presto marker calculation
 
   #Write files
-  cell_embeddings_with_expression <- cell_embeddings_with_expression[,gene_names_df$genes]
-  cell_embeddings_with_expression_transposed_sparse <- as(t(cell_embeddings_with_expression), "sparseMatrix")
+  cell_embeddings_with_expression_transposed_sparse <- cell_embeddings_with_expression[,gene_names]
+  cell_embeddings_with_expression_transposed_sparse <- as(t(cell_embeddings_with_expression_transposed_sparse), "sparseMatrix")
 
   ## Write file containing embeddings and gene expression
   write_feather(cell_embeddings_with_expression,
@@ -82,7 +82,7 @@ export_seurat_to_shiny_scCluster <- function(seurat_object,
 
   ## Write marker table
   saveRDS(cell_embeddings_with_expression_transposed_sparse,
-         file = paste(export_dir,"shiny_user_clustering.sparse_presto.rds",sep="/"),
+         file = paste(export_dir,"shiny_clustering.sparse_presto.rds",sep="/"),
          version = "2") ## This depends on the R kernel that is running on the galaxy and on the singularity container!
 
   cat("\n Successfully transformed data! \n")
