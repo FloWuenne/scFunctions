@@ -46,13 +46,15 @@ export_seurat_to_shiny_scCluster <- function(seurat_object,
   }
 
   cell_embeddings_with_expression <- merge(cell_embeddings,metadata,by=0)
+  cell_embeddings_with_expression$cell_id <- cell_embeddings_with_expression$Row.names
   rownames(cell_embeddings_with_expression) <- cell_embeddings_with_expression$Row.names
-  cell_embeddings_with_expression <- cell_embeddings_with_expression[2:ncol(cell_embeddings_with_expression)]
+  cell_embeddings_with_expression <- cell_embeddings_with_expression[,2:ncol(cell_embeddings_with_expression)]
   cell_embeddings_with_expression <- merge(cell_embeddings_with_expression,norm_data,by=0)
 
   ## make a tibble for clustering solutiosn
   clustering_solutions <- cell_embeddings_with_expression %>%
-    select(cell_classification)
+    mutate("cell_id" = rownames(cell_embeddings_with_expression)) %>%
+    select(cell_id,cell_classification)
 
   ## get gene names
   if(data_slot == "RNA"){
@@ -65,8 +67,7 @@ export_seurat_to_shiny_scCluster <- function(seurat_object,
   ## Format sparse matrix for presto marker calculation
 
   #Write files
-  cell_embeddings_with_expression_transposed_sparse <- cell_embeddings_with_expression[,gene_names]
-  cell_embeddings_with_expression_transposed_sparse <- as(t(cell_embeddings_with_expression_transposed_sparse), "sparseMatrix")
+  cell_embeddings_with_expression_transposed_sparse <- as(t(norm_data), "sparseMatrix")
 
   ## Write file containing embeddings and gene expression
   write_feather(cell_embeddings_with_expression,
