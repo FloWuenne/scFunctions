@@ -111,7 +111,8 @@ Now that we are ready to calculate the RSS for all regulons over all cell types.
 
 ```{r, message = FALSE,echo = FALSE, warning = FALSE,error = FALSE, results = "hide"}
 rrs_df <- calculate_rrs(metadata_sub,
-              binary_regulons = binary_regulons_trans)
+              binary_regulons = binary_regulons_trans,
+              cell_type_column = "cell_type")
 ```
 
 The output is a data frame with a RSS score for each regulon - cell type combination.
@@ -299,7 +300,8 @@ binary_regulons_trans <- as.matrix(t(joined_bin_reg))
 
 ## RRS
 rrs_df <- calculate_rrs(metadata_sub,
-              binary_regulons = binary_regulons_trans)
+              binary_regulons = binary_regulons_trans,
+              cell_type_column = "cell_type")
 
 rrs_df_wide <- rrs_df %>%
   spread(cell_type,RSS)

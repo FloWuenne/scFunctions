@@ -2,7 +2,7 @@
 #'
 #' @param metadata Dataframe containing metadata about cells. Has to create a column named cell_type that assigns groupings to cells.
 #' Can be the meta.data slot from a Seurat object.
-#' @param binary_regulons Data frame with binary regulons, where regulons are rows and columns are cells. Can be created from output of binarize_regulons().
+#' @param binary_regulons Data frame with bianry regulons, where regulons are rows and columns are cells. Can be created from output of binarize_regulons().
 #' @keywords SCENIC, regulons, binary activity, kmeans, thresholds
 #' @export
 #' @examples
@@ -38,16 +38,23 @@ calculate_rrs <- function(metadata,
 
     for(regulon_no in 1:length(regulons)) {
 
-      progress(regulon_no)
-
       regulon <- regulons[regulon_no]
 
       regulon_vec <- binary_regulons[regulon,]
-      regulon_norm <- regulon_vec/sum(regulon_vec)
+
+      regulon_vec_sum <- sum(regulon_vec)
+
+      ## Check that there are cells with binary activity > 0 for this regulon
+      if(regulon_vec_sum > 0){
+
+      #progress(regulon_no)
+
+      regulon_norm <- regulon_vec/regulon_vec_sum
 
       genotype_vec <- metadata[colnames(binary_regulons),]
       genotype_vec <- genotype_vec %>%
         mutate("cell_class" = if_else(get(cell_type_column) == ct,1,0))
+
       genotype_vec <- genotype_vec$cell_class
       genotype_norm <- genotype_vec/sum(genotype_vec)
 
@@ -64,9 +71,14 @@ calculate_rrs <- function(metadata,
                                 "RSS" = rss[1])
 
       jsd_matrix_ct <- rbind(jsd_matrix_ct,regulon_jsd)
+
+      }else if(regulon_vec_sum == 0){
+        print(paste("Filtered out:",regulon,". No cells with binary activity > 0 identified. Please check your threshold for this regulon!",sep=""))
+      }
     }
 
   }
+
   jsd_matrix_ct <- jsd_matrix_ct %>%
     arrange(desc(RSS))
 
