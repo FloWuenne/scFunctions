@@ -11,9 +11,7 @@
 
 ## Iterate over all cell types and perform jensen shannon divergence test using binary regulon activity and genotype
 
-calculate_rrs <- function(metadata,
-                          binary_regulons,
-                          cell_type_column = "cell_type_lvl1_abr"){
+calculate_rrs <- function(metadata,binary_regulons,cell_type_column){
 
   require(philentropy)
   require(SCENIC)
