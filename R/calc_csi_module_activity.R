@@ -8,14 +8,13 @@
 #' @examples
 #'
 
-calc_csi_module_activity <- function(clusters_df,
-                                     regulonAUC,
-                                     metadata){
+calc_csi_module_activity <- function(clusters_df,regulonAUC,metadata,cell_type_column){
 
   require(tidyverse)
   require(pheatmap)
   require(viridis)
-
+  
+  metadata$cell_type <- metadata[ , cell_type_column ]
   cell_types<- unique(metadata$cell_type)
   regulons <- unique(clusters_df$regulon)
 
@@ -24,8 +23,8 @@ calc_csi_module_activity <- function(clusters_df,
 
   csi_activity_matrix_list <- list()
   csi_cluster_activity <- data.frame("csi_cluster" = c(),
-                                    "mean_activity" = c(),
-                                    "cell_type" = c())
+                                     "mean_activity" = c(),
+                                     "cell_type" = c())
 
   cell_type_counter <- 0
   regulon_counter <-
