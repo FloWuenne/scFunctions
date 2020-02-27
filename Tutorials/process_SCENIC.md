@@ -1,6 +1,7 @@
 Processing and visualization of SCENIC results
 ================
 Florian Wuennemann
+March 22, 2005
 
 # Introduction
 
@@ -145,6 +146,8 @@ contains all of the binary regulons so that we can use them to calculate
 RRS scores.
 
 ``` r
+library(tidyverse)
+
 joined_bin_reg <- binary_regulons %>%
     reduce(left_join,by="cells")
 
@@ -245,6 +248,13 @@ head(metadata_sub)
 Now that we are ready to calculate the RSS for all regulons over all
 cell types.
 
+``` r
+rrs_df <- calculate_rrs(metadata_sub,
+              binary_regulons = binary_regulons_trans)
+```
+
+    ## Loading required package: philentropy
+
 The output is a data frame with a RSS score for each regulon - cell type
 combination.
 
@@ -285,11 +295,16 @@ plot_rrs_ranking(rrs_df,
     ## Loading required package: cowplot
 
     ## 
-    ## Attaching package: 'cowplot'
+    ## ********************************************************
 
-    ## The following object is masked from 'package:ggplot2':
-    ## 
-    ##     ggsave
+    ## Note: As of version 1.0.0, cowplot does not change the
+
+    ##   default ggplot2 theme anymore. To recover the previous
+
+    ##   behavior, execute:
+    ##   theme_set(theme_cowplot())
+
+    ## ********************************************************
 
 ![](process_SCENIC_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
@@ -299,16 +314,6 @@ types.
 
 ``` r
 library(ggridges)
-```
-
-    ## 
-    ## Attaching package: 'ggridges'
-
-    ## The following object is masked from 'package:ggplot2':
-    ## 
-    ##     scale_discrete_manual
-
-``` r
 rrs_df_nona <- subset(rrs_df,RSS > 0)
 ggplot(rrs_df_nona,aes(RSS,cell_type, fill = cell_type)) +
   geom_density_ridges(scale = 5, alpha = 0.75) +
@@ -316,7 +321,7 @@ ggplot(rrs_df_nona,aes(RSS,cell_type, fill = cell_type)) +
   theme(legend.position = "none")
 ```
 
-    ## Picking joint bandwidth of 0.0137
+    ## Picking joint bandwidth of 0.0138
 
 ![](process_SCENIC_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
@@ -577,7 +582,8 @@ binary_regulons_trans <- as.matrix(t(joined_bin_reg))
 
 ## RRS
 rrs_df <- calculate_rrs(metadata_sub,
-              binary_regulons = binary_regulons_trans)
+              binary_regulons = binary_regulons_trans,
+              cell_type_column = "cell_type")
 
 rrs_df_wide <- rrs_df %>%
   spread(cell_type,RSS)
@@ -630,7 +636,7 @@ csi_cluster_activity_wide <- calc_csi_module_activity(clusters_df,
 sessionInfo()
 ```
 
-    ## R version 3.6.0 (2019-04-26)
+    ## R version 3.6.1 (2019-07-05)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
     ## Running under: Ubuntu 18.04.2 LTS
     ## 
@@ -651,66 +657,70 @@ sessionInfo()
     ## 
     ## other attached packages:
     ##  [1] pheatmap_1.0.12        heatmaply_0.16.0       viridis_0.5.1         
-    ##  [4] viridisLite_0.3.0      plotly_4.9.0           ggridges_0.5.1        
-    ##  [7] cowplot_0.9.4          ggrepel_0.8.1          philentropy_0.3.0     
+    ##  [4] viridisLite_0.3.0      plotly_4.9.2           ggridges_0.5.2        
+    ##  [7] cowplot_1.0.0          ggrepel_0.8.1          philentropy_0.3.0     
     ## [10] svMisc_1.1.0           SCENIC_1.0.1-01        forcats_0.4.0         
-    ## [13] stringr_1.4.0          dplyr_0.8.1            purrr_0.3.2           
-    ## [16] readr_1.3.1            tidyr_0.8.3            tibble_2.1.2          
-    ## [19] ggplot2_3.1.1          tidyverse_1.2.1        scFunctions_0.0.0.9000
+    ## [13] stringr_1.4.0          dplyr_0.8.4            purrr_0.3.3           
+    ## [16] readr_1.3.1            tidyr_1.0.2            tibble_2.1.3          
+    ## [19] ggplot2_3.2.1          tidyverse_1.2.1        scFunctions_0.0.0.9000
     ## 
     ## loaded via a namespace (and not attached):
-    ##   [1] colorspace_1.4-1            XVector_0.24.0             
-    ##   [3] GenomicRanges_1.36.0        rstudioapi_0.10            
-    ##   [5] bit64_0.9-7                 AnnotationDbi_1.46.0       
-    ##   [7] lubridate_1.7.4             xml2_1.2.0                 
-    ##   [9] codetools_0.2-16            R.methodsS3_1.7.1          
-    ##  [11] knitr_1.23                  jsonlite_1.6               
-    ##  [13] broom_0.5.2                 annotate_1.62.0            
-    ##  [15] cluster_2.0.9               R.oo_1.22.0                
-    ##  [17] graph_1.62.0                shiny_1.3.2                
-    ##  [19] compiler_3.6.0              httr_1.4.0                 
-    ##  [21] backports_1.1.4             assertthat_0.2.1           
-    ##  [23] Matrix_1.2-17               lazyeval_0.2.2             
-    ##  [25] cli_1.1.0                   later_0.8.0                
-    ##  [27] htmltools_0.3.6             tools_3.6.0                
-    ##  [29] gtable_0.3.0                glue_1.3.1                 
-    ##  [31] GenomeInfoDbData_1.2.1      reshape2_1.4.3             
-    ##  [33] Rcpp_1.0.1                  Biobase_2.44.0             
-    ##  [35] cellranger_1.1.0            gdata_2.18.0               
-    ##  [37] nlme_3.1-140                crosstalk_1.0.0            
-    ##  [39] iterators_1.0.10            xfun_0.7                   
-    ##  [41] ps_1.3.0                    rvest_0.3.4                
-    ##  [43] mime_0.6                    gtools_3.8.1               
-    ##  [45] XML_3.98-1.19               dendextend_1.12.0          
-    ##  [47] MASS_7.3-51.4               zlibbioc_1.30.0            
-    ##  [49] scales_1.0.0                TSP_1.1-7                  
-    ##  [51] hms_0.4.2                   promises_1.0.1             
-    ##  [53] parallel_3.6.0              SummarizedExperiment_1.14.0
-    ##  [55] RColorBrewer_1.1-2          yaml_2.2.0                 
-    ##  [57] memoise_1.1.0               gridExtra_2.3              
-    ##  [59] stringi_1.4.3               RSQLite_2.1.1              
-    ##  [61] gclus_1.3.2                 S4Vectors_0.22.0           
-    ##  [63] foreach_1.4.4               seriation_1.2-5            
-    ##  [65] caTools_1.17.1.2            BiocGenerics_0.30.0        
-    ##  [67] BiocParallel_1.18.0         GenomeInfoDb_1.20.0        
-    ##  [69] rlang_0.3.4                 pkgconfig_2.0.2            
-    ##  [71] matrixStats_0.54.0          bitops_1.0-6               
-    ##  [73] AUCell_1.7.1                evaluate_0.14              
-    ##  [75] lattice_0.20-38             htmlwidgets_1.3            
-    ##  [77] labeling_0.3                processx_3.3.1             
-    ##  [79] bit_1.1-14                  tidyselect_0.2.5           
-    ##  [81] GSEABase_1.46.0             plyr_1.8.4                 
-    ##  [83] magrittr_1.5                R6_2.4.0                   
-    ##  [85] gplots_3.0.1.1              IRanges_2.18.1             
-    ##  [87] generics_0.0.2              DelayedArray_0.10.0        
-    ##  [89] DBI_1.0.0                   pillar_1.4.1               
-    ##  [91] haven_2.1.0                 withr_2.1.2                
-    ##  [93] RCurl_1.95-4.12             modelr_0.1.4               
-    ##  [95] crayon_1.3.4                KernSmooth_2.23-15         
-    ##  [97] rmarkdown_1.13              grid_3.6.0                 
-    ##  [99] readxl_1.3.1                data.table_1.12.2          
-    ## [101] callr_3.2.0                 blob_1.1.1                 
-    ## [103] digest_0.6.19               webshot_0.5.1              
-    ## [105] xtable_1.8-4                httpuv_1.5.1               
-    ## [107] R.utils_2.8.0               stats4_3.6.0               
-    ## [109] munsell_0.5.0               registry_0.5-1
+    ##   [1] readxl_1.3.1                backports_1.1.5            
+    ##   [3] plyr_1.8.5                  lazyeval_0.2.2             
+    ##   [5] GSEABase_1.46.0             BiocParallel_1.18.1        
+    ##   [7] crosstalk_1.0.0             GenomeInfoDb_1.20.0        
+    ##   [9] digest_0.6.24               foreach_1.4.7              
+    ##  [11] htmltools_0.4.0             gdata_2.18.0               
+    ##  [13] fansi_0.4.1                 magrittr_1.5               
+    ##  [15] memoise_1.1.0               cluster_2.1.0              
+    ##  [17] gclus_1.3.2                 annotate_1.62.0            
+    ##  [19] modelr_0.1.5                matrixStats_0.54.0         
+    ##  [21] R.utils_2.9.0               colorspace_1.4-1           
+    ##  [23] blob_1.2.0                  rvest_0.3.4                
+    ##  [25] haven_2.1.1                 xfun_0.9                   
+    ##  [27] callr_3.3.1                 crayon_1.3.4               
+    ##  [29] RCurl_1.95-4.12             jsonlite_1.6.1             
+    ##  [31] graph_1.62.0                iterators_1.0.12           
+    ##  [33] glue_1.3.1                  registry_0.5-1             
+    ##  [35] gtable_0.3.0                zlibbioc_1.30.0            
+    ##  [37] XVector_0.24.0              webshot_0.5.1              
+    ##  [39] DelayedArray_0.10.0         BiocGenerics_0.30.0        
+    ##  [41] scales_1.1.0                DBI_1.0.0                  
+    ##  [43] Rcpp_1.0.3                  xtable_1.8-4               
+    ##  [45] bit_1.1-15.2                stats4_3.6.1               
+    ##  [47] htmlwidgets_1.5.1           httr_1.4.1                 
+    ##  [49] gplots_3.0.1.2              RColorBrewer_1.1-2         
+    ##  [51] ellipsis_0.3.0              pkgconfig_2.0.3            
+    ##  [53] XML_3.99-0.3                R.methodsS3_1.7.1          
+    ##  [55] farver_2.0.3                tidyselect_1.0.0           
+    ##  [57] labeling_0.3                rlang_0.4.4                
+    ##  [59] reshape2_1.4.3              later_1.0.0                
+    ##  [61] AnnotationDbi_1.46.0        munsell_0.5.0              
+    ##  [63] cellranger_1.1.0            tools_3.6.1                
+    ##  [65] cli_2.0.1                   generics_0.0.2             
+    ##  [67] RSQLite_2.1.2               broom_0.5.2                
+    ##  [69] evaluate_0.14               fastmap_1.0.1              
+    ##  [71] yaml_2.2.1                  processx_3.4.1             
+    ##  [73] knitr_1.24                  bit64_0.9-7                
+    ##  [75] caTools_1.18.0              dendextend_1.12.0          
+    ##  [77] nlme_3.1-141                mime_0.9                   
+    ##  [79] R.oo_1.22.0                 xml2_1.2.2                 
+    ##  [81] compiler_3.6.1              rstudioapi_0.10            
+    ##  [83] stringi_1.4.6               ps_1.3.0                   
+    ##  [85] lattice_0.20-38             Matrix_1.2-17              
+    ##  [87] vctrs_0.2.2                 pillar_1.4.3               
+    ##  [89] lifecycle_0.1.0             data.table_1.12.8          
+    ##  [91] bitops_1.0-6                seriation_1.2-7            
+    ##  [93] httpuv_1.5.2                AUCell_1.7.1               
+    ##  [95] GenomicRanges_1.36.0        R6_2.4.1                   
+    ##  [97] promises_1.1.0              TSP_1.1-7                  
+    ##  [99] KernSmooth_2.23-15          gridExtra_2.3              
+    ## [101] IRanges_2.18.1              codetools_0.2-16           
+    ## [103] MASS_7.3-51.4               gtools_3.8.1               
+    ## [105] assertthat_0.2.1            SummarizedExperiment_1.14.1
+    ## [107] withr_2.1.2                 S4Vectors_0.22.0           
+    ## [109] GenomeInfoDbData_1.2.1      parallel_3.6.1             
+    ## [111] hms_0.5.0                   grid_3.6.1                 
+    ## [113] rmarkdown_1.14              Cairo_1.5-10               
+    ## [115] Biobase_2.44.0              shiny_1.4.0                
+    ## [117] lubridate_1.7.4

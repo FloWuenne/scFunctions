@@ -1,0 +1,20 @@
+---
+title: "Processing and visualization of SCENICprotocol (nextflow implementation) results"
+author: "FlorianW"
+date: "27/02/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(scFunctions)
+library(tidyverse)
+```
+
+
+
+# Introduction 
+
+Since I wrote the last small tutorial on how to process SCENIC data to calculate RRS scores from regulon activity, I 
+
+This tutorial will describe how to use the functions implemented in this package to further process the output from a typical run of the [SCENICprotocol](https://github.com/aertslab/SCENIC) repository. 
