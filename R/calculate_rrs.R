@@ -14,7 +14,6 @@
 calculate_rrs <- function(metadata,binary_regulons,cell_type_column){
 
   require(philentropy)
-  require(SCENIC)
   require(svMisc)
   require(dplyr)
   require(tidyr)

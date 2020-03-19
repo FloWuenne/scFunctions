@@ -10,7 +10,6 @@
 #' @keywords Seurat, cell type summary, compare replicates
 #' @export
 #' @examples
-#' ()
 
 ## dependencies:
 ## Seurat : https://github.com/satijalab/seurat

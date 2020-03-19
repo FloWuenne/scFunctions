@@ -11,7 +11,6 @@
 
 auc_thresh_kmeans <- function(regulonAUC){
 
-  require(SCENIC)
   require(svMisc)
   require(dplyr)
   require(tidyr)

@@ -10,9 +10,13 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
 library(scFunctions)
 library(tidyverse)
 ```
+
 
 # Introduction 
 
