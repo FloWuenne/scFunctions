@@ -398,7 +398,7 @@ heatmaply(rrs_df_wide_specific)
 
 This concludes the section about RSS calculations.
 
-## Calculate conecction specificity index (CSI) for all regulons
+## Calculate connection specificity index (CSI) for all regulons
 
 The final statistics that we want to calculate is the connection
 specificty index. The CSI is a major of connectedness between the
