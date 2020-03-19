@@ -10,7 +10,6 @@ LazyData: true
 RoxygenNote: 6.1.1.9000
 Imports: 
   philentropy,
-  SCENIC,
   svMisc,
   dplyr,
   tidyr,
