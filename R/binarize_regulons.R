@@ -4,9 +4,13 @@
 #' @param regulonAUC The AUC values for all regulons as calculated by SCENIC (content of file:3.4_regulonAUC.Rds).
 #' @param thresholds The AUC thresholds as determined by auc_thresh_kmeans or another method. Format has to be a named list with regulons as names and thresholds as values!
 #' @keywords SCENIC, regulons, binary activity, kmeans, thresholds
+#' @import SCENIC
+#' @import dplyr
 #' @export
 #' @examples
+#' \donttest{
 #' binary_regulons <- binarize_regulons(regulonAUC,regulon_thresholds)
+#' }
 
 
 ## Binarize regulons based on thresholds
@@ -22,8 +26,8 @@ binarize_regulons <- function(regulonAUC,
 
     regulon <- names(thresholds)[regulon_no]
 
-    auc_df <-  data.frame("auc" = regulonAUC@assays$data@listData$AUC[regulon,],
-                          "cells"= names(regulonAUC@assays$data@listData$AUC[regulon,]))
+    auc_df <-  data.frame("auc" = regulonAUC@assays@data@listData$AUC[regulon,],
+                          "cells"= names(regulonAUC@assays@data@listData$AUC[regulon,]))
 
     auc_df <- auc_df %>%
       mutate("regulon"= if_else(auc >= thresholds[regulon],1,0)) %>%

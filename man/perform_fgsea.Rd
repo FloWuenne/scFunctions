@@ -4,9 +4,12 @@
 \alias{perform_fgsea}
 \title{A function that will perform fgsea analysis on all cells in a given Seurat object.}
 \usage{
-perform_fgsea(seurat_object,
-  cell_types = sort(unique(seurat_object@ident)), output_dir = ".",
-  pathway_file)
+perform_fgsea(
+  seurat_object,
+  cell_types = sort(unique(seurat_object@ident)),
+  output_dir = ".",
+  pathway_file
+)
 }
 \arguments{
 \item{seurat_object}{The S4 Seurat object which contains filtered and normalized cells in the data slot.}
@@ -21,7 +24,9 @@ perform_fgsea(seurat_object,
 A function that will perform fgsea analysis on all cells in a given Seurat object.
 }
 \examples{
+\donttest{
 DE_Seurat()
+}
 }
 \keyword{DE,}
 \keyword{Seurat,}

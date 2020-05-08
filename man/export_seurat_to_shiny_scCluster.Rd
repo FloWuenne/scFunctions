@@ -4,9 +4,13 @@
 \alias{export_seurat_to_shiny_scCluster}
 \title{Exports data from a Seurat object to the formats required by scCluster_genap2}
 \usage{
-export_seurat_to_shiny_scCluster(seurat_object,
-  seurat_object_version = "v3", embedding_used = "UMAP",
-  data_slot = "RNA", export_dir = ".")
+export_seurat_to_shiny_scCluster(
+  seurat_object,
+  seurat_object_version = "v3",
+  embedding_used = "UMAP",
+  data_slot = "RNA",
+  export_dir = "."
+)
 }
 \arguments{
 \item{seurat_object}{The Seurat object to be processed.}

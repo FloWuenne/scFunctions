@@ -6,9 +6,16 @@
 #' @param de_groups The two group labels to use for differential expression, supplied as a vector.
 #' @param clusters_to_exclude Define a vector of clusters for which you don't want to perform DE analysis.
 #' @keywords Seurat, DE, differential expression
+#' @import fgsea
+#' @import Seurat
+#' @import gskb
+#' @import plyr
+#' @import ggplot2
 #' @export
 #' @examples
+#' \donttest{
 #' DE_Seurat()
+#' }
 
 ## dependencies:
 ## Seurat : https://github.com/satijalab/seurat
@@ -19,11 +26,6 @@ perform_fgsea <- function(seurat_object,
                           cell_types = sort(unique(seurat_object@ident)),
                           output_dir = ".",
                           pathway_file){
-
-  ## load libraries
-  require(fgsea)
-  require(Seurat)
-  require(gskb)
 
   ## Define cell types etc
 
@@ -98,7 +100,6 @@ perform_fgsea <- function(seurat_object,
 
   summarySE <- function(data=NULL, measurevar, groupvars=NULL, na.rm=TRUE,
                         conf.interval=.95, .drop=TRUE) {
-    library(plyr)
 
     # New version of length which can handle NA's: if na.rm==T, don't count them
     length2 <- function (x, na.rm=FALSE) {

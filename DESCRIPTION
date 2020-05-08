@@ -3,20 +3,35 @@ Title: Functions for single cell data analysis
 Version: 0.0.0.9000
 Authors@R: person("Florian", "Wuennemann", email = "flowuenne@gmail.com", role = c("aut", "cre"))
 Description: A collection of functions to handle single cell data QC and processing using tools such as Seurat and MAGIC.
-Depends: R (>= 3.4.0)
+Depends: R (>= 3.5.0),
+  tidyverse,
+  ggplot2
 License: WGPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1.9000
-Imports: 
+RoxygenNote: 7.1.0
+biocViews:
+Imports:
+  SCENIC,
   philentropy,
   svMisc,
   dplyr,
   tidyr,
-  SCENIC,
   ggrepel,
-  ggplot2,
   cowplot,
-  tidyverse,
   pheatmap,
-  viridis
+  viridis,
+  Seurat,
+  SCENIC,
+  plotly,
+  getopt,
+  UpSetR,
+  feather,
+  shiny,
+  DT,
+  Rmagic,
+  fgsea,
+  gskb,
+  RColorBrewer
+Remotes: 
+  aertslab/SCENIC  

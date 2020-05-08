@@ -8,8 +8,13 @@
 #' @param save_plot logical of whether to save the plot as png. Default = FALSE.
 #' @param output_dir Output directory of where to save the plot and corresponding table.
 #' @keywords Seurat, cell type summary, compare replicates
+#' @import ggplot2
+#' @import Seurat
+#' @import dplyr
+#' @import RColorBrewer
 #' @export
 #' @examples
+#' 
 
 ## dependencies:
 ## Seurat : https://github.com/satijalab/seurat
@@ -24,12 +29,6 @@ summarize_cell_types <- function(seurat_object,
                                         grouping_var_order = NULL,
                                         save_plot = FALSE,
                                         output_dir = "."){
-
-  ## Load libraries
-  require(ggplot2)
-  require(Seurat)
-  require(dplyr)
-  require(RColorBrewer)
 
   ## print start message
   print("Starting to summarize cell cycle phases...")

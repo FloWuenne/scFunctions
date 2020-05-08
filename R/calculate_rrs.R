@@ -4,6 +4,10 @@
 #' Can be the meta.data slot from a Seurat object.
 #' @param binary_regulons Data frame with bianry regulons, where regulons are rows and columns are cells. Can be created from output of binarize_regulons().
 #' @keywords SCENIC, regulons, binary activity, kmeans, thresholds
+#' @import philentropy
+#' @import svMisc
+#' @import dplyr
+#' @import tidyr
 #' @export
 #' @examples
 #'
@@ -12,11 +16,6 @@
 ## Iterate over all cell types and perform jensen shannon divergence test using binary regulon activity and genotype
 
 calculate_rrs <- function(metadata,binary_regulons,cell_type_column){
-
-  require(philentropy)
-  require(svMisc)
-  require(dplyr)
-  require(tidyr)
 
   cell_types <- unique(metadata[,cell_type_column])
   regulons <- rownames(binary_regulons)

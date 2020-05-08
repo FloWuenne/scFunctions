@@ -4,11 +4,17 @@
 \alias{DE_Seurat}
 \title{Function to perform differential expression analysis for all clusters in a Seurat object.}
 \usage{
-DE_Seurat(seurat_object, de_function = "wilcox",
-  output_dir = "../DE_Seurat", grouping_var = "Genotype",
-  de_groups = c("WT", "KO"), min_pct = 0.1,
-  man.logfc.threshold = 0.25, clusters_to_exclude = c(),
-  max_cells = Inf)
+DE_Seurat(
+  seurat_object,
+  de_function = "wilcox",
+  output_dir = "../DE_Seurat",
+  grouping_var = "Genotype",
+  de_groups = c("WT", "KO"),
+  min_pct = 0.1,
+  man.logfc.threshold = 0.25,
+  clusters_to_exclude = c(),
+  max_cells = Inf
+)
 }
 \arguments{
 \item{seurat_object}{The S4 Seurat object which contains filtered and normalized cells in the data slot.}
@@ -32,7 +38,9 @@ All the results will be saved in a folder above the current folder location name
 modified using the parameter 'output_dir'.
 }
 \examples{
+\donttest{
 DE_Seurat()
+}
 }
 \keyword{DE,}
 \keyword{Seurat,}

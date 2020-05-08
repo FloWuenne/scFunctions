@@ -6,6 +6,8 @@
 #' @param orientation Orientation of the plots. Wide = UMAP plots side-by-side, long = UMAP plots stacked.
 #' @param highlight_color Color with which to highlight the active cells for a regulon
 #' @keywords SCENIC, regulons, RRS, cell type classification
+#' @import Seurat
+#' @import tidyverse
 #' @export
 #' @examples
 #'
@@ -16,9 +18,6 @@ plot_bin_regulon_UMAP <- function(seurat_object,
                              regulon_name,
                              orientation = "wide",
                              highlight_color = "red"){
-
-  require(Seurat)
-  require(tidyverse)
 
   ## Plot binary regulon on top of UMAP
   umap_mapping <- as.data.frame(seurat_object@reductions$umap@cell.embeddings)

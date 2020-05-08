@@ -4,19 +4,21 @@
 #'
 #' @param regulonAUC The AUC values for all regulons as calculated by SCENIC (content of file:3.4_regulonAUC.Rds).
 #' @keywords SCENIC, regulons, binary activity, kmeans, thresholds
+#' @import SCENIC
+#' @import svMisc
+#' @import dplyr
+#' @import tidyr
 #' @export
 #' @examples
+#' \donttest{
 #' regulon_thresholds <- auc_thresh_kmeans(regulonAUC)
+#' }
 
 
 auc_thresh_kmeans <- function(regulonAUC){
 
-  require(svMisc)
-  require(dplyr)
-  require(tidyr)
-
   ## Iterate over each regulon in the AUC matrix
-  regulons <- rownames(regulonAUC@assays$data@listData$AUC)
+  regulons <- rownames(regulonAUC@assays@data@listData$AUC)
 
   kmeans_thresholds <- list()
 
@@ -28,8 +30,8 @@ auc_thresh_kmeans <- function(regulonAUC){
 
     regulon <- regulons[regulon_no]
 
-    df <- data.frame("auc" = regulonAUC@assays$data@listData$AUC[regulon,],
-                     "cells"= names(regulonAUC@assays$data@listData$AUC[regulon,]),
+    df <- data.frame("auc" = regulonAUC@assays@data@listData$AUC[regulon,],
+                     "cells"= names(regulonAUC@assays@data@listData$AUC[regulon,]),
                      "regulon" = regulon)
 
     ## Remove cells with 0 AUC as they interfere with kmeans clustering

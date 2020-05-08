@@ -6,9 +6,15 @@
 #' @param imputed logical that indicates whether data has been imputed and there is a data frame in @imputed or not. default = FALSE
 #' @param output_dir Directory in which to save the new RDS object. default = "."
 #' @keywords Seurat, Rshiny, heart maturation
+#' @import Seurat
+#' @import shiny
+#' @import DT
+#' @import dplyr
 #' @export
 #' @examples
+#' \donttest{
 #' extract_data_for_shiny_clustering()
+#' }
 
 ## dependencies:
 ## Seurat : https://github.com/satijalab/seurat
@@ -18,12 +24,6 @@ prepare_clustering_for_shiny <- function(seurat_object,
                                          label = "E14.5",
                                          imputed = FALSE,
                                          output_dir = ".") {
-
-  ## Load libraries
-  require(Seurat)
-  require(shiny)
-  require(DT)
-  require(dplyr)
 
   ## Define S4 object with the required components for the shiny server
   clustering_s4_object <- setClass("clustering_module",

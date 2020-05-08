@@ -4,21 +4,21 @@
 #' @param regulonAUC -
 #' @param metadata -
 #' @keywords SCENIC, regulons, CSI activity
+#' @import SCENIC
+#' @import tidyverse
+#' @import pheatmap
+#' @import viridis
 #' @export
 #' @examples
 #'
 
 calc_csi_module_activity <- function(clusters_df,regulonAUC,metadata,cell_type_column){
-
-  require(tidyverse)
-  require(pheatmap)
-  require(viridis)
   
   metadata$cell_type <- metadata[ , cell_type_column ]
   cell_types<- unique(metadata$cell_type)
   regulons <- unique(clusters_df$regulon)
 
-  regulonAUC_sub <- regulonAUC@assays$data@listData$AUC
+  regulonAUC_sub <- regulonAUC@assays@data@listData$AUC
   regulonAUC_sub <- regulonAUC_sub[regulons,]
 
   csi_activity_matrix_list <- list()

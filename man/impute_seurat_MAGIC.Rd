@@ -14,7 +14,9 @@ This function enables you to easily impute the normalized gene expression of a S
 More information about MAGIC can be found in the github repository.
 }
 \examples{
+\donttest{
 impute_seurat_MAGIC()
+}
 }
 \keyword{MAGIC,}
 \keyword{Seurat,}

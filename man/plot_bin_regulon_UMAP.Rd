@@ -4,8 +4,13 @@
 \alias{plot_bin_regulon_UMAP}
 \title{Calculates Regulon specificity score (RSS) from binary regulon activity.}
 \usage{
-plot_bin_regulon_UMAP(seurat_object, binary_regulons, regulon_name,
-  orientation = "wide", highlight_color = "red")
+plot_bin_regulon_UMAP(
+  seurat_object,
+  binary_regulons,
+  regulon_name,
+  orientation = "wide",
+  highlight_color = "red"
+)
 }
 \arguments{
 \item{seurat_object}{Processed seurat object (v3) with clustering results.}
