@@ -16,7 +16,7 @@ auc_thresh_kmeans <- function(regulonAUC){
   require(tidyr)
 
   ## Iterate over each regulon in the AUC matrix
-  regulons <- rownames(regulonAUC@assays$data@listData$AUC)
+  regulons <- rownames(regulonAUC@assays@data@listData$AUC)
 
   kmeans_thresholds <- list()
 
@@ -28,8 +28,8 @@ auc_thresh_kmeans <- function(regulonAUC){
 
     regulon <- regulons[regulon_no]
 
-    df <- data.frame("auc" = regulonAUC@assays$data@listData$AUC[regulon,],
-                     "cells"= names(regulonAUC@assays$data@listData$AUC[regulon,]),
+    df <- data.frame("auc" = regulonAUC@assays@data@listData$AUC[regulon,],
+                     "cells"= names(regulonAUC@assays@data@listData$AUC[regulon,]),
                      "regulon" = regulon)
 
     ## Remove cells with 0 AUC as they interfere with kmeans clustering

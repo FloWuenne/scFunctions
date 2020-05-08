@@ -13,7 +13,6 @@ Imports:
   svMisc,
   dplyr,
   tidyr,
-  SCENIC,
   ggrepel,
   ggplot2,
   cowplot,

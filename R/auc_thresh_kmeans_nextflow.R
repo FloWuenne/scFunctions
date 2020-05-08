@@ -67,4 +67,3 @@ auc_thresh_kmeans_nextflow <- function(regulonAUC){
   return(kmeans_thresholds)
   
 }
-```

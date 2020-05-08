@@ -22,8 +22,8 @@ binarize_regulons <- function(regulonAUC,
 
     regulon <- names(thresholds)[regulon_no]
 
-    auc_df <-  data.frame("auc" = regulonAUC@assays$data@listData$AUC[regulon,],
-                          "cells"= names(regulonAUC@assays$data@listData$AUC[regulon,]))
+    auc_df <-  data.frame("auc" = regulonAUC@assays@data@listData$AUC[regulon,],
+                          "cells"= names(regulonAUC@assays@data@listData$AUC[regulon,]))
 
     auc_df <- auc_df %>%
       mutate("regulon"= if_else(auc >= thresholds[regulon],1,0)) %>%

@@ -18,7 +18,7 @@ calc_csi_module_activity <- function(clusters_df,regulonAUC,metadata,cell_type_c
   cell_types<- unique(metadata$cell_type)
   regulons <- unique(clusters_df$regulon)
 
-  regulonAUC_sub <- regulonAUC@assays$data@listData$AUC
+  regulonAUC_sub <- regulonAUC@assays@data@listData$AUC
   regulonAUC_sub <- regulonAUC_sub[regulons,]
 
   csi_activity_matrix_list <- list()
