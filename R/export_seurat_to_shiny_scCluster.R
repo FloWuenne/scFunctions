@@ -5,6 +5,11 @@
 #' @param data_slot Data slot to extract the normalized data from. Either 'RNA' or 'SCT'. Default = 'RNA'.
 #' @param export_dir Directory to store the exported files into.
 #' @keywords Seurat, shiny, vusialization, processing, thresholds
+#' @import Seurat
+#' @import dplyr
+#' @import feather
+#' @import data.table
+#' @import getopt
 #' @export
 #'
 
@@ -14,25 +19,19 @@ export_seurat_to_shiny_scCluster <- function(seurat_object,
                                              data_slot = "RNA",
                                              export_dir = "."){
 
-  ## Load libraries
-  require("getopt")
-  require("Seurat")
-  require("feather")
-  require("data.table")
-  require("dplyr")
-
-
     if(seurat_object_version == "v2"){
-      seurat_object <- UpdateSeuratObject(seurat_object)
+      seurat_object <- Seurat::UpdateSeuratObject(seurat_object)
     }else if(seurat_object_version == "v3"){
       seurat_object <- seurat_object
     }
 
   ## Check which embedding was used
   if(embedding_used == "UMAP"){
-    cell_embeddings <- as.data.frame(seurat_object@reductions$umap@cell.embeddings)
+    cell_embeddings <- tryCatch(as.data.frame(seurat_object@reductions$UMAP@cell.embeddings), error = function(e){
+                            as.data.frame(seurat_object@reductions$umap@cell.embeddings)})
   } else if (embedding_used == "TSNE"){
-    cell_embeddings <- as.data.frame(seurat_object@reductions$tsne@cell.embeddings)
+    cell_embeddings <- tryCatch(as.data.frame(seurat_object@reductions$TSNE@cell.embeddings), error = function(e){
+                            as.data.frame(seurat_object@reductions$tsne@cell.embeddings)})
   }
 
   ## Extract data from Seurat object

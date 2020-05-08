@@ -16,7 +16,9 @@ This simple function will save the raw UMI matrix (seurat_object@raw.data), the 
 and the metadata (seurat_object@meta.data) from the Seurat object into tab separated files.
 }
 \examples{
+\donttest{
 export_data_from_seurat()
+}
 }
 \keyword{DE,}
 \keyword{Seurat,}

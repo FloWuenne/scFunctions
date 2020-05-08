@@ -4,7 +4,7 @@
 \alias{calc_csi_module_activity}
 \title{Calculate CSI module activity over all cell types}
 \usage{
-calc_csi_module_activity(clusters_df, regulonAUC, metadata)
+calc_csi_module_activity(clusters_df, regulonAUC, metadata, cell_type_column)
 }
 \arguments{
 \item{clusters_df}{-}

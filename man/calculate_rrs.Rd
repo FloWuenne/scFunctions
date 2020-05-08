@@ -4,13 +4,13 @@
 \alias{calculate_rrs}
 \title{Calculates Regulon specificity score (RSS) from binary regulon activity.}
 \usage{
-calculate_rrs(metadata, binary_regulons)
+calculate_rrs(metadata, binary_regulons, cell_type_column)
 }
 \arguments{
 \item{metadata}{Dataframe containing metadata about cells. Has to create a column named cell_type that assigns groupings to cells.
 Can be the meta.data slot from a Seurat object.}
 
-\item{binary_regulons}{Data frame with binary regulons, where regulons are rows and columns are cells. Can be created from output of binarize_regulons().}
+\item{binary_regulons}{Data frame with bianry regulons, where regulons are rows and columns are cells. Can be created from output of binarize_regulons().}
 }
 \description{
 Calculates Regulon specificity score (RSS) from binary regulon activity.

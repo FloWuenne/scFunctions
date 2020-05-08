@@ -4,16 +4,18 @@
 #'
 #' @param regulonAUC The AUC values for all regulons as calculated by SCENIC (content of file:3.4_regulonAUC.Rds).
 #' @keywords SCENIC, regulons, binary activity, kmeans, thresholds
+#' @import SCENIC
+#' @import svMisc
+#' @import dplyr
+#' @import tidyr
 #' @export
 #' @examples
+#' \donttest{
 #' regulon_thresholds <- auc_thresh_kmeans(regulonAUC)
+#' }
 
 
 auc_thresh_kmeans <- function(regulonAUC){
-
-  require(svMisc)
-  require(dplyr)
-  require(tidyr)
 
   ## Iterate over each regulon in the AUC matrix
   regulons <- rownames(regulonAUC@assays@data@listData$AUC)

@@ -6,10 +6,12 @@
 #' @param seurat_object The S4 Seurat object which contains filtered and normalized cells in the data slot.
 #' @param output_dir Directory where the data tables will be saved.
 #' @keywords Seurat, DE, differential expression
+#' @import Seurat
 #' @export
 #' @examples
+#' \donttest{
 #' export_data_from_seurat()
-
+#' }
 ## Simple function that will export the raw expression matrix, the normalized expression as well as the metadata table from a Seurat object
 ## All files will be saved as tsv files. The output directory can be specified using the output_dir parameter.
 export_data_from_seurat <- function(seurat_object,

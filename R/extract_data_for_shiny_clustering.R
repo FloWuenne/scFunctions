@@ -10,9 +10,14 @@
 #' @param imputed logical that indicates whether data has been imputed and there is a data frame in @imputed or not. default = TRUE
 #' @param output_dir Directory where the subclustering module and all gene Rds objects will be saved. default = "."
 #' @keywords Seurat, Rshiny, heart maturation, speed optimization
+#' @import Seurat
+#' @import shiny
+#' @import DT
 #' @export
 #' @examples
+#' \donttest{
 #' extract_data_for_shiny_clustering()
+#' }
 
 ## dependencies:
 ## Seurat : https://github.com/satijalab/seurat
@@ -21,13 +26,6 @@ extract_data_for_shiny_clustering <- function(seurat_object,
                                               time_points = c("E14.5","E16.5","E18.5","P1","P4","P7"),
                                               imputed = TRUE,
                                               output_dir = ".") {
-
-  ## Load libraries
-  require("Seurat")
-  require("shiny")
-  require("DT")
-
-  ##
 
   for(sample in time_points){
     ## Print a message

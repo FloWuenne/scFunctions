@@ -2,16 +2,18 @@
 #'
 #' @param regulonAUC The AUC values for all regulons as calculated by SCENIC (content of file:3.4_regulonAUC.Rds).
 #' @keywords SCENIC, regulons, binary activity, kmeans, thresholds
+#' @import SCENIC
+#' @import tidyverse
+#' @import svMisc
 #' @export
 #' @examples
+#' \donttest{
 #' regulon_thresholds <- auc_thresh_kmeans(regulonAUC)
+#' }
 
 calculate_csi <- function(regulonAUC,
                           calc_extended = FALSE,
                           verbose = FALSE){
-
-  require(tidyverse)
-  require(svMisc)
 
   compare_pcc <- function(vector_of_pcc,pcc){
     pcc_larger <- length(vector_of_pcc[vector_of_pcc > pcc])

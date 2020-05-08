@@ -13,9 +13,15 @@
 #' @param man.logfc.threshold The minimum log-fold change a change has to have to be tested. (changes Seurats FindMarker logfc.threshold variable)
 #' @param clusters_to_exclude Define a vector of clusters for which you don't want to perform DE analysis.
 #' @keywords Seurat, DE, differential expression
+#' @import Seurat
+#' @import ggplot2
+#' @import UpSetR
+#' @import dplyr
 #' @export
 #' @examples
+#' \donttest{
 #' DE_Seurat()
+#' }
 
 ## dependencies:
 ## Seurat : https://github.com/satijalab/seurat
@@ -32,13 +38,6 @@ DE_Seurat <- function(seurat_object,
                       clusters_to_exclude = c(),
                       max_cells = Inf)
   {
-
-  ## Load libraries
-  require(plotly)
-  require(ggplot2)
-  require(Seurat)
-  require(UpSetR)
-  require(dplyr)
 
   ## print start message
   print("Starting differential expression analysis")
@@ -63,22 +62,22 @@ DE_Seurat <- function(seurat_object,
     print(paste("Working on cluster #",cluster_number,":",this_cluster,sep=""))
 
     ## Subset Seurat object to only contain cells from this cluster
-    cells_in_this_cluster <- SubsetData(seurat_object,
+    cells_in_this_cluster <- Seurat::SubsetData(seurat_object,
                                         ident.use=this_cluster)
 
     ## Get vector of names for both groups of cells
-    cells_group_1 <- rownames(subset(cells_in_this_cluster@meta.data,get(grouping_var) == de_groups[1]))
-    cells_group_2 <- rownames(subset(cells_in_this_cluster@meta.data,get(grouping_var) == de_groups[2]))
+    cells_group_1 <- rownames(Seurat::subset(cells_in_this_cluster@meta.data,get(grouping_var) == de_groups[1]))
+    cells_group_2 <- rownames(Seurat::subset(cells_in_this_cluster@meta.data,get(grouping_var) == de_groups[2]))
 
     ## Check whether there are cells in both groups, otherwise skip this cluster
     if(length(cells_group_1) > 1 & length(cells_group_2) > 1){
 
-      cells_in_this_cluster <- StashIdent(cells_in_this_cluster, save.name = "OldIdent")
-      cells_in_this_cluster <- SetAllIdent(cells_in_this_cluster, id = grouping_var)
+      cells_in_this_cluster <- Seurat::StashIdent(cells_in_this_cluster, save.name = "OldIdent")
+      cells_in_this_cluster <- Seurat::SetAllIdent(cells_in_this_cluster, id = grouping_var)
 
       ## Perform differential expression test using the Seurat FindMarkers function
       this_cluster_de_genes <- data.frame()
-      this_cluster_de_genes <- FindMarkers(cells_in_this_cluster,
+      this_cluster_de_genes <- Seurat::FindMarkers(cells_in_this_cluster,
                                                   ident.1 = de_groups[1],
                                                   ident.2 = de_groups[2],
                                                   print.bar = TRUE,
@@ -110,7 +109,7 @@ DE_Seurat <- function(seurat_object,
       upset_Rlist_DE_genes[[this_cluster]] <- c(this_cluster_de_genes$gene)
 
       ## Calculate cell type average expressions to check correlation between the two groups
-      avg.cells_in_this_cluster <- log1p(AverageExpression(cells_in_this_cluster, show.progress = FALSE))
+      avg.cells_in_this_cluster <- log1p(Seurat::AverageExpression(cells_in_this_cluster, show.progress = FALSE))
       avg.cells_in_this_cluster$gene <- rownames(avg.cells_in_this_cluster)
 
 

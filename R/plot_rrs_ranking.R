@@ -6,6 +6,9 @@
 #' @param ggrepel_point_padding same as the force parameter for geom_text_repel.
 #' @param top_genes Number of top genes to label in plot using ggrepel.
 #' @keywords SCENIC, regulons, RRS, cell type classification
+#' @import ggrepel
+#' @import cowplot
+#' @import tidyverse
 #' @export
 #' @examples
 #'
@@ -17,9 +20,6 @@ plot_rrs_ranking <- function(rrs_df,
                              ggrepel_point_padding = 0.2,
                              top_genes = 4,
                              plot_extended = FALSE){
-
-  require(ggrepel)
-  require(cowplot)
 
   if(plot_extended == TRUE){
     rrs_df <- rrs_df %>%

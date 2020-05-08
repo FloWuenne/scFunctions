@@ -13,7 +13,9 @@ calculate_csi(regulonAUC, calc_extended = FALSE, verbose = FALSE)
 Calculates CSI values for all regulon pairs
 }
 \examples{
+\donttest{
 regulon_thresholds <- auc_thresh_kmeans(regulonAUC)
+}
 }
 \keyword{SCENIC,}
 \keyword{activity,}

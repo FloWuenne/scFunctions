@@ -4,9 +4,12 @@
 \alias{extract_data_for_shiny_clustering}
 \title{Function to perform differential expression analysis for all clusters in a Seurat object.}
 \usage{
-extract_data_for_shiny_clustering(seurat_object, time_points = c("E14.5",
-  "E16.5", "E18.5", "P1", "P4", "P7"), imputed = TRUE,
-  output_dir = ".")
+extract_data_for_shiny_clustering(
+  seurat_object,
+  time_points = c("E14.5", "E16.5", "E18.5", "P1", "P4", "P7"),
+  imputed = TRUE,
+  output_dir = "."
+)
 }
 \arguments{
 \item{seurat_object}{The S4 Seurat object which contains filtered and normalized cells in the data slot.}
@@ -24,7 +27,9 @@ All the results will be saved in a folder above the current folder location name
 modified using the parameter 'output_dir'.
 }
 \examples{
+\donttest{
 extract_data_for_shiny_clustering()
+}
 }
 \keyword{Rshiny,}
 \keyword{Seurat,}

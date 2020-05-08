@@ -4,8 +4,14 @@
 \alias{summarize_cell_types}
 \title{Function to summarize and analyze the number of cells and fraction of each cell type over multiple replicates in a Seurat object.}
 \usage{
-summarize_cell_types(seurat_object, Replicate_column, grouping_var,
-  grouping_var_order = NULL, save_plot = FALSE, output_dir = ".")
+summarize_cell_types(
+  seurat_object,
+  Replicate_column,
+  grouping_var,
+  grouping_var_order = NULL,
+  save_plot = FALSE,
+  output_dir = "."
+)
 }
 \arguments{
 \item{seurat_object}{The S4 Seurat object which contains filtered and normalized cells in the data slot.}
@@ -24,7 +30,7 @@ summarize_cell_types(seurat_object, Replicate_column, grouping_var,
 Function to summarize and analyze the number of cells and fraction of each cell type over multiple replicates in a Seurat object.
 }
 \examples{
-()
+
 }
 \keyword{Seurat,}
 \keyword{cell}

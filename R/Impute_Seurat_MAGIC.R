@@ -4,9 +4,13 @@
 #' More information about MAGIC can be found in the github repository.
 #' @param seurat_object The S4 Seurat object which contains filtered and normalized cells in the data slot.
 #' @keywords Seurat, MAGIC, imputation
+#' @import Seurat
+#' @import Rmagic
 #' @export
 #' @examples
+#' \donttest{
 #' impute_seurat_MAGIC()
+#' }
 
 ## This function takes as input a Seurat object and uses MAGIC to perform imputation of the data.
 ## Imputation is performed on the filtered and normalized cells in the @data slot of the seurat object!
@@ -17,10 +21,6 @@
 ## MAGIC : https://github.com/KrishnaswamyLab/MAGIC
 
 impute_seurat_MAGIC <- function(seurat_object){
-
-  ## Load libraries
-  require(Seurat)
-  require(Rmagic)
 
   ## Print status message
   print("Starting magic imputation on your seurat object...")

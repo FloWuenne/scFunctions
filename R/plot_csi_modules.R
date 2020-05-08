@@ -4,6 +4,9 @@
 #' @param nclust Number of clusters to divide the heatmap into
 #' @param font_size_regulons Font size for regulon names.
 #' @keywords SCENIC, regulons, CSI
+#' @import tidyverse
+#' @import pheatmap
+#' @import viridis
 #' @export
 #' @examples
 #'
@@ -11,10 +14,6 @@
 plot_csi_modules <- function(csi_df,
                              nclust = 10,
                              font_size_regulons = 6){
-
-  require(tidyverse)
-  require(pheatmap)
-  require(viridis)
 
   ## subset csi data frame based on threshold
   csi_test_mat <- csi_df %>%
