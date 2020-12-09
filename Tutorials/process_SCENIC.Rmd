@@ -17,7 +17,6 @@ library(scFunctions)
 library(tidyverse)
 ```
 
-
 # Introduction 
 
 This tutorial will describe how to use the functions implemented in this package to further process the output from a typical run of the [SCENIC pipeline](https://github.com/aertslab/SCENIC). This tutorial assumes that you have processed your data up until the third step of the pipeline. The following data will be required for completely running this tutorial:

@@ -34,7 +34,7 @@ calculate_csi <- function(regulonAUC,
     return(fraction_lower)
   }
 
-  regulonAUC_sub <- regulonAUC@assays$data@listData$AUC
+  regulonAUC_sub <- regulonAUC@assays@data@listData$AUC
 
   if(calc_extended == TRUE){
     regulonAUC_sub <- subset(regulonAUC_sub,grepl("extended",rownames(regulonAUC_sub)))
