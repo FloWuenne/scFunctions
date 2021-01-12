@@ -1,8 +1,10 @@
 ---
-title: "Processing and visualization of SCENICprotocol (nextflow implementation) results"
+title: "Processing and visualization of SCENICprotocol (nextflow implementation) results in R"
 author: "FlorianW"
 date: "27/02/2020"
-output: html_document
+always_allow_html: yes
+output: 
+  rmarkdown::github_document
 ---
 
 ```{r setup, include=FALSE}
