@@ -154,11 +154,9 @@ RRS scores.
 ``` r
 library(tidyverse)
 
-joined_bin_reg <- binary_regulons %>%
-    reduce(left_join,by="cells")
-
-rownames(joined_bin_reg) <- joined_bin_reg$cells
-joined_bin_reg <- joined_bin_reg[2:ncol(joined_bin_reg)]
+joined_bin_reg <- binary_regulons %>% 
+purrr::reduce(left_join,by="cells") %>% 
+tibble::column_to_rownames("cells")
 
 binary_regulons_trans <- as.matrix(t(joined_bin_reg))
 ```
