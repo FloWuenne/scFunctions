@@ -8,7 +8,6 @@
 #' @keywords Seurat, DE, differential expression
 #' @import fgsea
 #' @import Seurat
-#' @import gskb
 #' @import plyr
 #' @import ggplot2
 #' @export
@@ -16,6 +15,8 @@
 #' \donttest{
 #' DE_Seurat()
 #' }
+
+## DEPRECATED!!!
 
 ## dependencies:
 ## Seurat : https://github.com/satijalab/seurat
