@@ -31,7 +31,6 @@ Imports:
   DT,
   Rmagic,
   fgsea,
-  gskb,
   RColorBrewer
 Remotes: 
   aertslab/SCENIC  
